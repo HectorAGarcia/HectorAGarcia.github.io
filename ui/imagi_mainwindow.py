@@ -81,6 +81,23 @@ class Ui_MainWindow(QMainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.pushButton.setText(_translate("MainWindow", "Setup Scene", None))
         self.pushButton_3.setText(_translate("MainWindow", "Imagine", None))
+<<<<<<< HEAD
+=======
+        # For a button action just do self.desiredbutton.clicked.connect(self.definedfunction)
+        # like in the following example
+        self.pushButton_3.clicked.connect(self.get_text)
+
+
+    # Functions not made by the generator
+    """
+    Function to get the text from the text editor.
+    -usercode variable is where the code to be analyzed is in
+    """
+    usercode = ''
+    def get_text(self):
+        user_code = self.textEdit.toPlainText()
+
+>>>>>>> origin/master
 
 
 if __name__ == '__main__':
