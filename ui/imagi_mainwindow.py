@@ -79,7 +79,8 @@ class Ui_MainWindow(QMainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.pushButton.setText(_translate("MainWindow", "Setup Scene", None))
         self.pushButton_3.setText(_translate("MainWindow", "Imagine", None))
-        # For a button action just do .clicked.connect(self.definedfunction) like in the following example
+        # For a button action just do self.desiredbutton.clicked.connect(self.definedfunction)
+        # like in the following example
         self.pushButton_3.clicked.connect(self.get_text)
 
 
