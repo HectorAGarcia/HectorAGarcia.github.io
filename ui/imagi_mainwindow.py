@@ -26,8 +26,7 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(QMainWindow):
-    # Added By Edgardo.... not the generator
-    # textEdit = QtGui.QTextEdit()
+    # not done by the generator
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
@@ -51,9 +50,8 @@ class Ui_MainWindow(QMainWindow):
         font.setPointSize(14)
         self.textEdit.setFont(font)
         p = self.textEdit.palette()
-        p.setColor(QPalette.Base, QColor(228, 255, 221))
+        p.setColor(QPalette.Base, QColor(228, 255, 221)) # text editor bg color
         self.textEdit.setPalette(p)
-
         # --------------------------------------
 
         self.pushButton = QtGui.QPushButton(self.centralwidget)
@@ -81,6 +79,19 @@ class Ui_MainWindow(QMainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.pushButton.setText(_translate("MainWindow", "Setup Scene", None))
         self.pushButton_3.setText(_translate("MainWindow", "Imagine", None))
+        # For a button action just do .clicked.connect(self.definedfunction) like in the following example
+        self.pushButton_3.clicked.connect(self.get_text)
+
+
+    # Functions not made by the generator
+    """
+    Function to get the text from the text editor.
+    -usercode variable is where the code to be analyzed is in
+    """
+    usercode = ''
+    def get_text(self):
+        user_code = self.textEdit.toPlainText()
+
 
 
 if __name__ == '__main__':
