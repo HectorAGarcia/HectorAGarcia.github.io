@@ -1,6 +1,5 @@
 from PyQt4 import QtGui
 from PyQt4.QtGui import *
-import sys
 import imagi_syntax
 
 app = QtGui.QApplication([])
@@ -9,7 +8,7 @@ app = QtGui.QApplication([])
 window = QMainWindow()
 
 # Code editor
-editor = QtGui.QTextEdit
+editor = QtGui.QTextEdit()
 editor.setLineWrapMode(QTextEdit.NoWrap)
 
 font = QFont()
