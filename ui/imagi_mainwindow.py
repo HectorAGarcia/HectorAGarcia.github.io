@@ -7,9 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 # ----------------------------------------
+
 from PyQt4.QtGui import *
 import imagi_syntax
 import sys
+
 # ----------------------------------------
 
 from PyQt4 import QtCore, QtGui
