@@ -26,10 +26,9 @@ class Window(QtGui.QMainWindow):
         self.setButtons()
         self.setImage()
 
-    def setMenuBar(self):
+
+    """def setMenuBar(self):
         self.menu =self.menuBar()
-
-
 
     def addTab(self,name):
         self.menus[name[1:]]=self.menu.addMenu(name)
@@ -43,8 +42,7 @@ class Window(QtGui.QMainWindow):
     def addTextbox(self,x,y,width,height):
         self.texto=QtGui.QTextEdit(self)
         self.texto.resize(width,height)
-        self.texto.move(x,y)
-
+        self.texto.move(x,y)"""
 
     def addLabel(self,msg,x,y,width,height):
         self.label = QtGui.QLabel(msg,self)
@@ -58,6 +56,7 @@ class Window(QtGui.QMainWindow):
         self.images.append(self.label)
         self.label.setPixmap(QtGui.QPixmap(msg))
         self.label.resize(width,height)
+        self.label.setScaledContents(True)
         self.label.move(x,y)
         if len(self.images)>1:
             self.images[len(self.images)-1].setVisible(False)
@@ -85,10 +84,10 @@ class Window(QtGui.QMainWindow):
         self.scenes.append(self.label)
         self.label.setPixmap(QtGui.QPixmap(msg))
         self.label.resize(width,height)
+        self.label.setScaledContents(True)
         self.label.move(x,y)
         if len(self.scenes)>1:
             self.scenes[len(self.scenes)-1].setVisible(False)
-
 
     def nextScene(self):
         if self.scenecount<len(self.scenes)-1:
@@ -167,9 +166,9 @@ class Window(QtGui.QMainWindow):
         self.addLabel3("Media/dog_converted.png",200,75,80,80)
         self.addLabel3("Media/lion_converted.png",200,75,80,80)
         self.addLabel3("Media/fish_converted.png",200,75,80,80)
-        self.addLabel4("Media/campo.png",340,360,120,120)
-        self.addLabel4("Media/campo2.png",340,360,120,120)
-        self.addLabel4("Media/sea.png",340,360,120,120)
+        self.addLabel4("Media/scene1.png",340,360,120,120)
+        self.addLabel4("Media/scene2.png",340,360,120,120)
+        self.addLabel4("Media/scene3.png",340,360,120,120)
         self.addLabel("Media/add.png",440,201,20,20)
         self.addLabel("Media/add.png",450,470,20,20)
 
@@ -182,6 +181,11 @@ class Window(QtGui.QMainWindow):
         self.characters=[]
         self.characters.append(name)
 
+    def moveimageAnimation(self,imageLabel):
+        for i in range(0,200):
+            imageLabel.move(imageLabel.x() + 1, imageLabel.y())
+            imageLabel.repaint()
+            app.processEvents()
 
 
 app = QtGui.QApplication(sys.argv)
