@@ -186,7 +186,7 @@ class Window(QtGui.QMainWindow):
 
 app = QtGui.QApplication(sys.argv)
 window = Window()
-window2= Window()
+
 
 
 sys.exit(app.exec_())
