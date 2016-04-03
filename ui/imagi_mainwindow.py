@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'imagi_mainwindow.ui'
+# Form implementation generated from reading ui file 'imagi_mainwindow_v3.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
 # ----------------------------------------
-
 from PyQt4.QtGui import *
 import imagi_syntax
 import sys
-
 # ----------------------------------------
 
 from PyQt4 import QtCore, QtGui
@@ -38,153 +36,96 @@ class Ui_MainWindow(QMainWindow):
         self.setupUi(self)
     # ----------------------------------
 
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.setEnabled(True)
-        MainWindow.resize(1108, 864)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        MainWindow.resize(820, 717)
+
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("../../../../../Dropbox/PL/IMAGI-Logo-S.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("../../../../Dropbox/PL/IMAGI_PL/fish.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
-        MainWindow.setAutoFillBackground(False)
-        MainWindow.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
+        MainWindow.setTabShape(QtGui.QTabWidget.Rounded)
         self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setEnabled(True)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
-        self.centralwidget.setSizePolicy(sizePolicy)
-        self.centralwidget.setAutoFillBackground(False)
-        self.centralwidget.setStyleSheet(_fromUtf8("background-color: rgb(255, 221, 48);"))
+        self.centralwidget.setStyleSheet(_fromUtf8("background-color: rgb(27, 194, 244);"))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.blueTopStripe = QtGui.QWidget(self.centralwidget)
-        self.blueTopStripe.setGeometry(QtCore.QRect(-30, 0, 1141, 31))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.blueTopStripe.sizePolicy().hasHeightForWidth())
-        self.blueTopStripe.setSizePolicy(sizePolicy)
-        self.blueTopStripe.setAutoFillBackground(False)
-        self.blueTopStripe.setStyleSheet(_fromUtf8("background-color: rgb(38, 237, 255);"))
-        self.blueTopStripe.setObjectName(_fromUtf8("blueTopStripe"))
-        self.scene = QtGui.QGraphicsView(self.centralwidget)
-        self.scene.setGeometry(QtCore.QRect(10, 430, 1091, 341))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scene.sizePolicy().hasHeightForWidth())
-        self.scene.setSizePolicy(sizePolicy)
-        self.scene.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
-        self.scene.setFrameShape(QtGui.QFrame.Box)
-        self.scene.setFrameShadow(QtGui.QFrame.Raised)
-        self.scene.setObjectName(_fromUtf8("scene"))
-        self.redBotStripe = QtGui.QWidget(self.centralwidget)
-        self.redBotStripe.setGeometry(QtCore.QRect(-10, 780, 1121, 31))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.redBotStripe.sizePolicy().hasHeightForWidth())
-        self.redBotStripe.setSizePolicy(sizePolicy)
-        self.redBotStripe.setStyleSheet(_fromUtf8("background-color: rgb(226, 0, 113);"))
-        self.redBotStripe.setObjectName(_fromUtf8("redBotStripe"))
-        self.brownBelowGraphics = QtGui.QWidget(self.centralwidget)
-        self.brownBelowGraphics.setGeometry(QtCore.QRect(0, 420, 1111, 361))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.brownBelowGraphics.sizePolicy().hasHeightForWidth())
-        self.brownBelowGraphics.setSizePolicy(sizePolicy)
-        self.brownBelowGraphics.setStyleSheet(_fromUtf8("background-color: rgb(157, 78, 0);"))
-        self.brownBelowGraphics.setObjectName(_fromUtf8("brownBelowGraphics"))
-        self.scene.raise_()
+        self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+
+        # Top Red Stripe ----
+        self.lineEdit_2 = QtGui.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setEnabled(False)
+        self.lineEdit_2.setStyleSheet(_fromUtf8("background-color: rgb(239, 0, 119);"))
+        self.lineEdit_2.setFrame(False)
+        self.lineEdit_2.setReadOnly(True)
+        self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
+        self.verticalLayout.addWidget(self.lineEdit_2)
+        # -------------------
+
+        # Tab Widget ----
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1111, 421))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy)
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.tabWidget.setPalette(palette)
-        self.tabWidget.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
+        self.tabWidget.setStyleSheet(_fromUtf8("background-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69));"))
         self.tabWidget.setTabShape(QtGui.QTabWidget.Triangular)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
-        self.textEditorTab = QtGui.QWidget()
-        self.textEditorTab.setObjectName(_fromUtf8("textEditorTab"))
-        self.textEdit = QtGui.QTextEdit(self.textEditorTab)
-        self.textEdit.setGeometry(QtCore.QRect(0, 0, 1111, 401))
+
+        # Code Editor Tab ----
+        self.codeEditorTab = QtGui.QWidget()
+        self.codeEditorTab.setStyleSheet(_fromUtf8("background-color: rgb(157, 78, 0);"))
+        self.codeEditorTab.setObjectName(_fromUtf8("codeEditorTab"))
+        self.verticalLayout_2 = QtGui.QVBoxLayout(self.codeEditorTab)
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
+        self.textEdit = QtGui.QTextEdit(self.codeEditorTab)
         self.textEdit.setStyleSheet(_fromUtf8("background-color: rgb(255, 239, 211);"))
-        self.textEdit.setFrameShape(QtGui.QFrame.NoFrame)
-        self.textEdit.setFrameShadow(QtGui.QFrame.Plain)
         self.textEdit.setObjectName(_fromUtf8("textEdit"))
-        self.tabWidget.addTab(self.textEditorTab, _fromUtf8(""))
+        self.verticalLayout_2.addWidget(self.textEdit)
+        self.tabWidget.addTab(self.codeEditorTab, _fromUtf8(""))
+        # ---------------------
+
+        # Scene Editor Tab ----
         self.sceneEditorTab = QtGui.QWidget()
+        self.sceneEditorTab.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
         self.sceneEditorTab.setObjectName(_fromUtf8("sceneEditorTab"))
         self.tabWidget.addTab(self.sceneEditorTab, _fromUtf8(""))
+        # ---------------------
+        self.verticalLayout.addWidget(self.tabWidget)
+        # ----
 
+        # Graphics View ----
+        self.graphicsView = QtGui.QGraphicsView(self.centralwidget)
+        self.graphicsView.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);\n" "border-color: rgb(157, 78, 0);"))
+        self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
+        self.verticalLayout.addWidget(self.graphicsView)
+        # ----
 
-
-
-
+        # Imagine Button ----
         self.imagineButton = QtGui.QPushButton(self.centralwidget)
-        self.imagineButton.setGeometry(QtCore.QRect(460, 790, 201, 31))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.imagineButton.sizePolicy().hasHeightForWidth())
-        self.imagineButton.setSizePolicy(sizePolicy)
-        self.imagineButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
+        self.imagineButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);\n" "border-color: rgb(255, 0, 127);"))
+        self.imagineButton.setAutoDefault(False)
+        self.imagineButton.setDefault(False)
+        self.imagineButton.setFlat(False)
         self.imagineButton.setObjectName(_fromUtf8("imagineButton"))
-        self.redBotStripe.raise_()
-        self.brownBelowGraphics.raise_()
-        self.blueTopStripe.raise_()
-        self.scene.raise_()
-        self.tabWidget.raise_()
-        self.imagineButton.raise_()
+        self.verticalLayout.addWidget(self.imagineButton)
+        # ----
+
+        # Bottom Red Stripe ----
+        self.lineEdit = QtGui.QLineEdit(self.centralwidget)
+        self.lineEdit.setEnabled(False)
+        self.lineEdit.setStyleSheet(_fromUtf8("background-color: rgb(239, 0, 119);"))
+        self.lineEdit.setFrame(False)
+        self.lineEdit.setReadOnly(True)
+        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
+        self.verticalLayout.addWidget(self.lineEdit)
+        # ----------------------
+
+        # ---------------------------------------------------
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1108, 26))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.menubar.sizePolicy().hasHeightForWidth())
-        self.menubar.setSizePolicy(sizePolicy)
-        self.menubar.setStyleSheet(_fromUtf8(""))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 820, 26))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtGui.QStatusBar(MainWindow)
+        self.statusbar.setObjectName(_fromUtf8("statusbar"))
+        MainWindow.setStatusBar(self.statusbar)
+        # ----------------------------------------------------
 
         # Added By Edgardo.... not the generator
         # The following is setting up the text editor
@@ -201,8 +142,8 @@ class Ui_MainWindow(QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "IMAGI Programming Language for Kids - Focus on Storytelling", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.textEditorTab), _translate("MainWindow", "Code Editor", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "IMAGI - Programming Language for Kids - Focus on Storytelling", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.codeEditorTab), _translate("MainWindow", "Code Editor", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.sceneEditorTab), _translate("MainWindow", "Scene Editor", None))
         self.imagineButton.setText(_translate("MainWindow", "IMAGINE", None))
         # For a button action just do .clicked.connect(self.definedfunction) like in the following example -Edgardo
@@ -218,7 +159,6 @@ class Ui_MainWindow(QMainWindow):
     def get_text(self):
         user_code = self.textEdit.toPlainText()
         print user_code
-
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
