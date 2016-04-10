@@ -9,6 +9,7 @@
 # ----------------------------------------
 from PyQt4.QtGui import *
 import imagi_syntax
+import imagi_character
 import sys
 # ----------------------------------------
 
@@ -34,6 +35,12 @@ class Ui_MainWindow(QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
+        self.characters = []
+        self.activeCharacters = []
+        self.setCharacters()
+        self.backgrounds = []
+        self.setBackgrounds()
+        self.default_scene()
     # ----------------------------------
 
 
@@ -42,11 +49,11 @@ class Ui_MainWindow(QMainWindow):
         MainWindow.resize(820, 717)
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("../../../../Dropbox/PL/IMAGI_PL/fish.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("Media/fish.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setTabShape(QtGui.QTabWidget.Rounded)
         self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setStyleSheet(_fromUtf8("background-color: rgb(27, 194, 244);"))
+        # self.centralwidget.setStyleSheet(_fromUtf8("background-color: rgb(27, 194, 244);"))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -85,6 +92,14 @@ class Ui_MainWindow(QMainWindow):
         self.sceneEditorTab.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
         self.sceneEditorTab.setObjectName(_fromUtf8("sceneEditorTab"))
         self.tabWidget.addTab(self.sceneEditorTab, _fromUtf8(""))
+        self.applySceneChangesButton = QtGui.QPushButton(self.sceneEditorTab)
+        self.applySceneChangesButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 238, 41);\n" "border-color: rgb(255, 0, 127);"))
+        self.applySceneChangesButton.setAutoDefault(False)
+        self.applySceneChangesButton.setDefault(False)
+        self.applySceneChangesButton.setFlat(False)
+        self.applySceneChangesButton.setObjectName(_fromUtf8("applySceneChangesButton"))
+        self.applySceneChangesButton.setGeometry(QtCore.QRect(580, 240, 200, 20))
+        self.applySceneChangesButton.setText('Apply Scene Changes')
         # ---------------------
         self.verticalLayout.addWidget(self.tabWidget)
         # ----
@@ -94,6 +109,12 @@ class Ui_MainWindow(QMainWindow):
         self.graphicsView.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);\n" "border-color: rgb(157, 78, 0);"))
         self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
         self.verticalLayout.addWidget(self.graphicsView)
+        self.graphicsView.isHidden()
+        self.sceneBackground = QtGui.QLabel(self.centralwidget)
+        self.sceneBackground.setText(_fromUtf8(""))
+        self.sceneBackground.setScaledContents(True)
+        self.sceneBackground.setGeometry(QtCore.QRect(11, 332, 798, 289))
+        self.sceneBackground.setObjectName(_fromUtf8("sceneBackground"))
         # ----
 
         # Imagine Button ----
@@ -148,21 +169,154 @@ class Ui_MainWindow(QMainWindow):
         self.imagineButton.setText(_translate("MainWindow", "IMAGINE", None))
         # For a button action just do .clicked.connect(self.definedfunction) like in the following example -Edgardo
         self.imagineButton.clicked.connect(self.get_text)
-
+        self.applySceneChangesButton.clicked.connect(self.apply_scene_changes)
 
     # Functions not made by the generator
     """
-    Function to get the text from the text editor.
-    -usercode variable is where the code to be analyzed is in
+    Function for apply scene changes button that updates the background
+    according to the radio button selected in the background selector in the
+    scene editor tab.
     """
-    usercode = ''
+    def apply_scene_changes(self):
+        self.setSelectedCharactersAsActive()
+        self.displaySelectedBackground()
+
+    """
+    Function to get the text from the text editor.
+    """
     def get_text(self):
-        user_code = self.textEdit.toPlainText()
-        print user_code
+        return self.textEdit.toPlainText()
+
+    """
+    Function to analize the animations to be done, analizes the input code.
+    """
+    def analize_animation(self):
+        raw_code = self.get_text() # We must get the raw text first
+        # to do....
+
+    """
+    Function to setup the chracters available for the user to select
+    """
+    def setCharacters(self):
+        self.characterSelectText = QtGui.QLabel(self.sceneEditorTab)
+        self.characterSelectText.setText('CHARACTERS')
+        self.characterSelectText.setGeometry(QtCore.QRect(150, 10, 95, 20))
+
+        fishIcon = QtGui.QIcon()
+        fishIcon.addPixmap(QtGui.QPixmap(_fromUtf8("Media/fish.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        dogIcon = QtGui.QIcon()
+        dogIcon.addPixmap(QtGui.QPixmap(_fromUtf8("Media/dog.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        lionIcon = QtGui.QIcon()
+        lionIcon.addPixmap(QtGui.QPixmap(_fromUtf8("Media/lion.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self.fishButton = QtGui.QCheckBox(self.sceneEditorTab)
+        self.fishButton.setIcon(fishIcon)
+        self.fishButton.setText('Fish')
+        self.fishButton.setGeometry(QtCore.QRect(20, 50, 95, 20))
+
+        self.dogButton = QtGui.QCheckBox(self.sceneEditorTab)
+        self.dogButton.setIcon(dogIcon)
+        self.dogButton.setText('Dog')
+        self.dogButton.setGeometry(QtCore.QRect(20, 100, 95, 20))
+
+        self.lionButton = QtGui.QCheckBox(self.sceneEditorTab)
+        self.lionButton.setIcon(lionIcon)
+        self.lionButton.setText('Lion')
+        self.lionButton.setGeometry(QtCore.QRect(20, 150, 95, 20))
+        # Add them to a list
+        self.characters.append(self.fishButton)
+        self.characters.append(self.dogButton)
+        self.characters.append(self.lionButton)
+
+    """
+    Function to setup the backgrounds available for the user to select
+    """
+    def setBackgrounds(self):
+        self.backgroundSelectText = QtGui.QLabel(self.sceneEditorTab)
+        self.backgroundSelectText.setText('BACKGROUND')
+        self.backgroundSelectText.setGeometry(QtCore.QRect(550, 10, 95, 20))
+
+        self.desertButton = QtGui.QRadioButton(self.sceneEditorTab)
+        self.desertButton.setText('Desert Highway')
+        self.desertButton.setGeometry(QtCore.QRect(420, 50, 120, 20))
+
+        self.beachButton = QtGui.QRadioButton(self.sceneEditorTab)
+        self.beachButton.setText('Cool Beach')
+        self.beachButton.setGeometry(QtCore.QRect(420, 100, 120, 20))
+
+        self.plainsButton = QtGui.QRadioButton(self.sceneEditorTab)
+        self.plainsButton.setText('Pink Tree Plains')
+        self.plainsButton.setGeometry(QtCore.QRect(420, 150, 120, 20))
+        # Add them to a list
+        self.backgrounds.append(self.desertButton)
+        self.backgrounds.append(self.beachButton)
+        self.backgrounds.append(self.plainsButton)
+
+    """
+    Displays the background according to the selected radio button, remember that only radio button can be
+    selected at a time.
+    """
+    def displaySelectedBackground(self):
+        for background in self.backgrounds:
+            if background.isChecked() and background.text() == 'Pink Tree Plains':
+                self.sceneBackground.setPixmap(QtGui.QPixmap(_fromUtf8("Media/pink_tree_plains.png")))
+            if background.isChecked() and background.text() == 'Desert Highway':
+                self.sceneBackground.setPixmap(QtGui.QPixmap(_fromUtf8("Media/desert_highway.png")))
+            if background.isChecked() and background.text() == 'Cool Beach':
+                self.sceneBackground.setPixmap(QtGui.QPixmap(_fromUtf8("Media/cool_beach.png")))
+
+    def addCharacterToScene(self, character, character_image, posX, posY, length, width):
+        self.charLabel = QtGui.QLabel(self.centralwidget)
+        self.charLabel.setText(_fromUtf8(""))
+        self.charLabel.setScaledContents(True)
+        self.charLabel.setGeometry(QtCore.QRect(posX, posY, length, width))
+        self.charLabel.setObjectName(_fromUtf8(character))
+        self.charLabel.setPixmap(QtGui.QPixmap(_fromUtf8(character_image)))
+        return self.charLabel
+
+    def setSelectedCharactersAsActive(self):
+        for character in self.characters:
+            if character.isChecked() and character.text() == 'Fish':
+                self.fishCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
+                self.activeCharacters.append(self.fishCharacter)
+                self.fishCharacter.setActive(True)
+            #elif character in self.activeCharacters and character.text() == 'Fish':
+             #   self.activeCharacters.remove(self.fishCharacter)
+              #  self.fishCharacter.setActive(False)
+            if character.isChecked() and character.text() == 'Dog':
+                self.dogCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
+                self.activeCharacters.append(self.dogCharacter)
+                self.dogCharacter.setActive(True)
+            #elif character in self.activeCharacters and character.text() == 'Dog':
+             #   self.activeCharacters.remove(self.dogCharacter)
+              #  self.dogCharacter.setActive(False)
+            if character.isChecked() and character.text() == 'Lion':
+                self.lionCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
+                self.activeCharacters.append(self.lionCharacter)
+                self.lionCharacter.setActive(True)
+            #elif character in self.activeCharacters and character.text() == 'Lion':
+             #   self.activeCharacters.remove(self.lionCharacter)
+              #  self.lionCharacter.setActive(False)
+
+    """
+    Function to update the scene according to default editor selectables
+    Called upon startup
+    """
+    def default_scene(self):
+        self.backgrounds[2].setChecked(True) # Default background scene is Pink Tree Plains
+        self.characters[0].setChecked(True) # Default active character is Fish
+        self.setSelectedCharactersAsActive()
+
+    """
+    Function to update the scene according to scene editor selectables
+    """
+    def update_scene(self):
+        return None
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
     mw = Ui_MainWindow()
     highlight = imagi_syntax.ImagiHighlighter(mw.textEdit.document())
+    mw.displaySelectedBackground()
     mw.show()
     sys.exit(app.exec_())
