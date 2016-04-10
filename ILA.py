@@ -67,21 +67,68 @@ class CommandProccesor():
     def loadCommands(self):
         self.addCommand("jump",0,jumpexe)
         self.addCommand("sing",0, singexe)
-
+        self.addCommand("domath",0,domathexe)
 
 
 #Commands executables
 
-def jumpexe(target):
-    print target.getValue()+" jump!"
+def jumpexe(tokens):
+    print tokens[0].getValue()+" jump!"
 
-def singexe(target):
-    print target.getValue()+" Sing!"
+def singexe(tokens):
+    print tokens[0].getValue()+" Sing!"
 
-def domathexe(op,target):
+def domathexe(tokens):
+    if tokens[2].getValue()=="+":
+        print sum(tokens[3].getValue())
+    elif tokens[2].getValue()=="-":
+        print sub(tokens[3].getValue())
+    elif tokens[2].getValue()=="*":
+        print mult(tokens[3].getValue())
+    else:
+        print div(tokens[3].getValue())
+
+
+#Check Variables existance
+def check_Num_Exist(name,list):
+
+    for item in list.keys():
+        if name == item:
+            return True
+    return False
 
 #Math operations:
-def sum(target):
+
+def sub(items):
+    return "subtraction"
+
+def mult(items):
+    return "mult"
+
+def div(items):
+    return "division"
+
+def sum(items):
+    sum=0
+    i=0
+    list=compiler.get_TokenizerNUMVAR()
+    for item in items:
+        i=0
+        try:
+            i=int(item)
+        except ValueError:
+            if check_Num_Exist(item,list):
+                i=int(list[item])
+            else:
+                return "Not valid variable: "+item
+        sum=sum+i
+    return str(sum)
+
+
+
+
+
+
 
 
 
@@ -94,13 +141,13 @@ class Tokenizer():
     def __init__(self):
         self.setUpTokenizer()
         self.interrupt=Interrupt()
-        self.word=False
+        self.WordVariables={}
+        self.NumberVariables={}
 
     def tokenize(self,line):
         items=line.split(" ")
         tokens=[]
-        self.word=False
-
+        self.interrupt.clrFlag()
         for token in items:
             if not self.interrupt.checkFlag():
                 item=self.checkToken(token)
@@ -111,7 +158,7 @@ class Tokenizer():
         if self.interrupt.checkFlag():
             self.interrupt.executeISR(self,tokens,items)
 
-        if len(items)!= len(tokens) and (not self.word):
+        if len(items)!= len(tokens) and not self.interrupt.checkFlag():
             print "Operation can't be completed"
             return tokens
         else:
@@ -143,6 +190,9 @@ class Tokenizer():
         if self.if_Math(token):
             self.interrupt.raiseFlag("Math")
             return self.createToken(token,"command")
+        if self.if_Number(token):
+            self.interrupt.raiseFlag("Number")
+            return self.createToken(token,"Number")
         return ''
 
 
@@ -151,6 +201,13 @@ class Tokenizer():
         self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath']
         self.atributes=["right",'left']
         self.operators=["+","-","*"]
+
+
+    def if_Number(self,token):
+        if token =="Number":
+            return True
+        return False
+
 
     def if_character(self,token):
         for character in self.characters:
@@ -192,6 +249,11 @@ class Tokenizer():
                 return True
         return False
 
+    def getWordDict(self):
+        return self.WordVariables
+
+    def getNumberDict(self):
+        return self.NumberVariables
 
     def createToken(self,value,ID):
         token=Token(value)
@@ -228,9 +290,14 @@ class Compiler():
         statement1=['character','command','atribute']
         statement2=['character','command']
         statement3=['Word','Name','String']
+        statement4=['Number','Name','Value']
+        statement5=['character','command','Operator','List']
         self.statements.append(statement1)
         self.statements.append(statement2)
         self.statements.append(statement3)
+        self.statements.append(statement4)
+        self.statements.append(statement5)
+
 
     def checkIFValidStatement(self,tokens):
         i=0
@@ -252,11 +319,12 @@ class Compiler():
     def compile(self, line):
         tokens=self.tokenizer.tokenize(line)
         if self.checkIFValidStatement(tokens):
-            self.printStatement(tokens)
+
+            #self.printStatement(tokens)
             index=self.find_cmd(tokens)
 
             if index!=-1:
-                self.cmdPC.execute(tokens[index].getValue(),self.count_atributes(tokens),tokens[0])
+                self.cmdPC.execute(tokens[index].getValue(),self.count_atributes(tokens),tokens)
 
         else:
             print "Not valid statement!"
@@ -282,13 +350,17 @@ class Compiler():
             index+=1
         return -1
 
+    def get_TokenizerNUMVAR(self):
+        return self.tokenizer.getNumberDict()
+
 
 
 class Interrupt():
     def __init__(self):
         self.flag=0
         self.flagName=""
-        self.ISR={"Word":self.WordISR,"Math": self.MathISR}
+        self.ISR={"Word":self.WordISR,"Math": self.MathISR,"Number":self.NumberISR}
+
 
     def raiseFlag(self,name):
         self.flag=1
@@ -303,29 +375,42 @@ class Interrupt():
 
     def executeISR(self, instance,tokens,items):
         self.ISR[self.flagName](instance,tokens,items)
-        self.clrFlag()
 
+
+
+    def NumberISR(self,instance,tokens,items):
+        if len(items)==3:
+             tokens.append(instance.createToken(items[1],"Name"))
+             tokens.append(instance.createToken(items[2],"Value"))
+             instance.NumberVariables[items[1]]=items[2]
 
 
     def WordISR(self,instance,tokens, items):
-        tokens.append(instance.createToken(items[1],"Name"))
+
         if len(items) > 2 and instance.checkifStringRule(items):
+            tokens.append(instance.createToken(items[1],"Name"))
             tokens.append(instance.toString(items))
-        self.clrFlag()
+            instance.WordVariables[items[1]]=tokens[len(tokens)-1].getValue()
+            print instance.getWordDict()
+
 
     def MathISR(self,instance,tokens,items):
         list=[]
-        if instance.validateOP(items[2]):
-            tokens.append(instance.createToken(items[2],"Operator"))
-            for item in items[3:]:
-                if item !="":
-                    list.append(item)
-            instance.createToken(list,"List")
-            self.clrFlag()
+        if len(items)> 3:
+            if instance.validateOP(items[2]):
+                tokens.append(instance.createToken(items[2],"Operator"))
+                for item in items[3:]:
+                     if item !="":
+                         list.append(item)
+                tokens.append(instance.createToken(list,"List"))
+        if len(tokens) < 3:
+            tokens.append(instance.createToken("not valid","String"))
+
 
 
 
 compiler=Compiler()
-while True:
-   s=raw_input("cmd> ")
-   compiler.compile(s)
+text="fish jump;fish domath + 5 6; jump fish"
+s=text.split(";")
+for line in s:
+    compiler.compile(line)
