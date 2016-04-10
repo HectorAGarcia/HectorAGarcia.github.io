@@ -24,6 +24,18 @@ class Animator():
                 imageLabel.repaint()
                 app.processEvents()
 
+    def runAnimation(self,imageLabel,direction):
+        if direction=="right":
+            for i in range(0,30):
+                imageLabel.move(imageLabel.x() + 6, imageLabel.y())
+                imageLabel.repaint()
+                app.processEvents()
+        elif direction=="left":
+            for i in range(0,30):
+                imageLabel.move(imageLabel.x() - 6, imageLabel.y())
+                imageLabel.repaint()
+                app.processEvents()
+
     def jumpAnimation(self,imageLabel):
             for i in range(0,20):
                 imageLabel.move(imageLabel.x(), imageLabel.y()-4)
@@ -64,6 +76,12 @@ class Animator():
 
     def moveRight(self):
         self.moveAnimation(self.character,"right")
+
+    def runLeft(self):
+        self.runAnimation(self.character,"left")
+
+    def runRight(self):
+        self.runAnimation(self.character,"right")
 
     def jump(self):
         self.jumpAnimation(self.character)
