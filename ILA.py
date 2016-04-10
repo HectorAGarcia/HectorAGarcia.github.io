@@ -410,7 +410,7 @@ class Interrupt():
 
 
 compiler=Compiler()
-text="fish jump;fish domath + 5 6; jump fish"
+text="fish jump;fish domath + 5 6; jump fish "
 s=text.split(";")
 for line in s:
     compiler.compile(line)
