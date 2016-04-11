@@ -9,7 +9,7 @@
 # ----------------------------------------
 from PyQt4.QtGui import *
 import imagi_syntax
-import imagi_character
+import imagi_character_class
 import sys
 # ----------------------------------------
 
@@ -232,10 +232,10 @@ class Ui_MainWindow(QMainWindow):
         self.characters.append(self.dogButton)
         self.characters.append(self.lionButton)
         # Create the characters
-        self.fishCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
-        self.dogCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
+        self.fishCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
+        self.dogCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
         self.dogCharacter.characterLabel.setVisible(False)
-        self.lionCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
+        self.lionCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
         self.lionCharacter.characterLabel.setVisible(False)
 
     """
