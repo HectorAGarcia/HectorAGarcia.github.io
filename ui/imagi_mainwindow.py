@@ -9,7 +9,7 @@
 # ----------------------------------------
 from PyQt4.QtGui import *
 import imagi_syntax
-import imagi_character_class
+import imagi_character
 import sys
 # ----------------------------------------
 
@@ -41,6 +41,7 @@ class Ui_MainWindow(QMainWindow):
         self.backgrounds = []
         self.setBackgrounds()
         self.default_scene()
+        self.animation = None # The animation object, do not change
     # ----------------------------------
 
 
@@ -168,7 +169,7 @@ class Ui_MainWindow(QMainWindow):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.sceneEditorTab), _translate("MainWindow", "Scene Editor", None))
         self.imagineButton.setText(_translate("MainWindow", "IMAGINE", None))
         # For a button action just do .clicked.connect(self.definedfunction) like in the following example -Edgardo
-        self.imagineButton.clicked.connect(self.get_text)
+        self.imagineButton.clicked.connect(self.analize_animation)
         self.applySceneChangesButton.clicked.connect(self.apply_scene_changes)
 
     # Functions not made by the generator
@@ -193,6 +194,7 @@ class Ui_MainWindow(QMainWindow):
     """
     def analize_animation(self):
         raw_code = self.get_text() # We must get the raw text first
+        self.moveRight(self.fishCharacter.characterLabel) # Testing move right animation
         # to do....
 
     """
@@ -229,10 +231,10 @@ class Ui_MainWindow(QMainWindow):
         self.characters.append(self.dogButton)
         self.characters.append(self.lionButton)
         # Create the characters
-        self.fishCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
-        self.dogCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
+        self.fishCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
+        self.dogCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
         self.dogCharacter.characterLabel.setVisible(False)
-        self.lionCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
+        self.lionCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
         self.lionCharacter.characterLabel.setVisible(False)
 
     """
@@ -320,6 +322,22 @@ class Ui_MainWindow(QMainWindow):
     """
     def update_scene(self):
         return None
+
+    """
+    Animation Functions
+    """
+    def moveRight(self, characterLabel):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(1000)
+        x1 = characterLabel.x()
+        x2 = characterLabel.x() + 100
+        y1 = characterLabel.y()
+        w1 = characterLabel.width()
+        h1 = characterLabel.height()
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
+        animationMoveRight.start()
+        self.animation = animationMoveRight # assign the animation object, this specific animation to be performed, VERY IMPORTANT(will not work without)
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
