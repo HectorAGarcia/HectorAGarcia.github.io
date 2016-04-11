@@ -1,9 +1,13 @@
-#Command Check
+"""
+---------------------------------Command Check -------------------------------------------
+"""
 class CommandCheck():
     def __init__(self,cmdList):
         self.commands=cmdList
 
-
+    # - Name: name of command that is wanted to be execute
+    # - nAtributes: number of tokens that are identified as atribute
+    # - validCommand: check if the given command is valid
     def validCommand(self,Name,nAtributes):
         if self.validName(Name):
             if self.validNAtributes(Name,nAtributes):
@@ -26,26 +30,32 @@ class CommandCheck():
 
 
 
-#Command Class
+"""
+-------------------------Command Class------------------------------------------------
+"""
 class Command():
     def __init__(self,Name,nAtributes,executable):
         self.name=Name
         self.nAtributes=nAtributes
         self.executable=executable
 
-
+    # -getName: returns the name of the command
     def getName(self):
         return self.name
 
+    # -getNAtributes: return the number of atributes that are suposed to be indentified as atributes
     def getNAtributes(self):
         return self.nAtributes
 
+    # -getExe: return the name of the function to be executed by the command
     def getExe(self):
         return self.executable
 
 
 
-#CommandProccessor
+"""
+-----------------------------Command Proccesor Class------------------------------------------------
+"""
 class CommandProccesor():
 
     def __init__(self):
@@ -53,30 +63,49 @@ class CommandProccesor():
         self.loadCommands()
         self.cmdcheck= CommandCheck(self.commands)
 
-    def execute(self, cmd, natributes,target):
+
+    # -cmd: Name of the command to execute
+    # -tokens: tokens that contain the information needed to execute the command
+    def execute(self, cmd, natributes,tokens):
         valid=self.cmdcheck.validCommand(cmd,natributes)
         if valid=="":
-                self.commands[cmd].getExe()(target)
+                self.commands[cmd].getExe()(tokens)
         else:
             print valid
 
-
+    #-addCommand: add a command to the list
     def addCommand(self,Name, natributes,executable):
         self.commands[Name]=Command(Name,natributes,executable)
 
+    # -loadCommands: setup the command list
     def loadCommands(self):
         self.addCommand("jump",0,jumpexe)
         self.addCommand("sing",0, singexe)
         self.addCommand("domath",0,domathexe)
+        self.addCommand("grow",0,growexe)
+        self.addCommand("shrink",0,shrinkexe)
+        self.addCommand("flip",0,flipexe)
 
 
-#Commands executables
+"""
+-------------------------Command Executables------------------------------------------------
+"""
 
 def jumpexe(tokens):
     print tokens[0].getValue()+" jump!"
 
 def singexe(tokens):
     print tokens[0].getValue()+" Sing!"
+
+def growexe(tokens):
+    print tokens[0].getValue()+" Grow!"
+
+def shrinkexe(tokens):
+    print tokens[0].getValue()+" Shrink!"
+
+def flipexe(tokens):
+    print tokens[0].getValue()+" Flip!"
+
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
@@ -127,15 +156,9 @@ def sum(items):
 
 
 
-
-
-
-
-
-
-
-
-#Tokenizer
+"""
+-------------------------------Tokenizer Class-----------------------------------------------------------
+"""
 
 class Tokenizer():
     def __init__(self):
@@ -144,9 +167,16 @@ class Tokenizer():
         self.WordVariables={}
         self.NumberVariables={}
 
+    #-line: code line to tokenize
+    #-tokenize: identify tokens on a code line and return it
     def tokenize(self,line):
-        items=line.split(" ")
+        notready=line.split(" ")
+        items=[]
         tokens=[]
+        for item in notready:
+            if item !="":
+                items.append(item)
+
         self.interrupt.clrFlag()
         for token in items:
             if not self.interrupt.checkFlag():
@@ -165,7 +195,8 @@ class Tokenizer():
             return tokens
 
 
-
+    #-checkifStringRule: verify if the given string is between quotes
+    #-items: tokens that belong to the string
     def checkifStringRule(self,items):
         count =0
         if items[2][0]=='"':
@@ -177,6 +208,7 @@ class Tokenizer():
                             count+=1
         return count ==2
 
+    #-checkToken: identify the token with the correct ID
     def checkToken(self, token):
         if self.if_character(token):
             return self.createToken(token,"character")
@@ -195,72 +227,83 @@ class Tokenizer():
             return self.createToken(token,"Number")
         return ''
 
-
+    #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
         self.characters=["fish",'lion','bird']
         self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath']
         self.atributes=["right",'left']
         self.operators=["+","-","*"]
 
-
+    #check if the token is Number type
     def if_Number(self,token):
         if token =="Number":
             return True
         return False
 
-
+    #check if the token is a character
     def if_character(self,token):
         for character in self.characters:
             if token == character:
                 return True
         return False
 
+    #check if the token is a command
     def if_command(self,token):
         for command in self.commands:
             if token == command:
                 return True
         return False
 
+    #check if the token is a atribute
     def if_atribute(self,token):
         for atribute in self.atributes:
             if token == atribute:
                 return True
         return False
 
+    #check if token is Word type
     def if_word(self,token):
         if token=="Word":
             return True
         return False
 
+    #check if token is domath command
     def if_Math(self,token):
         if token=="domath":
             return True
         return False
 
+    #convert a list of items to string
     def toString(self, items):
         token=''
         for item in items[2:]:
             token=token+" "+item
         return self.createToken(token[2:len(token)-1],"String")
 
+    #check if the operation given is valid
     def validateOP(self,op):
         for oper in self.operators:
             if op == oper:
                 return True
         return False
 
+    #returns the dictionary containing all the Word type variables
     def getWordDict(self):
         return self.WordVariables
 
+    #returns the dictionary containinf all the Number type variables
     def getNumberDict(self):
         return self.NumberVariables
 
+    #create a token with the given value and the corresponding ID
     def createToken(self,value,ID):
         token=Token(value)
         token.setID(ID)
         return token
 
-#token object
+"""
+---------------------------------------Token Class---------------------------------------------
+"""
 class Token():
 
     def __init__(self,value):
@@ -277,14 +320,17 @@ class Token():
         self.ID=ID
 
 
-#Compiler
-
+"""
+-------------------------------------Compiler Class--------------------------------------
+"""
 class Compiler():
     def __init__(self):
         self.tokenizer=Tokenizer()
         self.loadValidStatements()
         self.cmdPC= CommandProccesor()
 
+
+    # -loadValidStatements: define the statements accepted
     def loadValidStatements(self):
         self.statements=[]
         statement1=['character','command','atribute']
@@ -298,7 +344,7 @@ class Compiler():
         self.statements.append(statement4)
         self.statements.append(statement5)
 
-
+    # -checkIFValidStatement : check if the statement given is valid
     def checkIFValidStatement(self,tokens):
         i=0
         valid=False
@@ -316,11 +362,13 @@ class Compiler():
             i+=1
         return valid
 
+    #-line: line of code
+    #-compile: compile the line of code supplied
     def compile(self, line):
         tokens=self.tokenizer.tokenize(line)
         if self.checkIFValidStatement(tokens):
 
-            #self.printStatement(tokens)
+
             index=self.find_cmd(tokens)
 
             if index!=-1:
@@ -329,12 +377,8 @@ class Compiler():
         else:
             print "Not valid statement!"
 
-    def printStatement(self, tokens):
-        out=""
-        for item in tokens:
-            out=out+item.getID()+": "+item.getValue()+" "
-        print out
-
+    #-tokens: tokens that belong to the code line
+    # count the number of atributes inside the token list
     def count_atributes(self,tokens):
         count=0
         for token in tokens:
@@ -342,6 +386,7 @@ class Compiler():
                 count+=1
         return count
 
+    #find the index of the cmd on the token list
     def find_cmd(self,tokens):
         index=0
         for token in tokens:
@@ -350,11 +395,14 @@ class Compiler():
             index+=1
         return -1
 
+    #returns the dictionary containing the Number type variables
     def get_TokenizerNUMVAR(self):
         return self.tokenizer.getNumberDict()
 
 
-
+"""
+------------------------------------Interrupt Class-------------------------------------------
+"""
 class Interrupt():
     def __init__(self):
         self.flag=0
@@ -410,7 +458,11 @@ class Interrupt():
 
 
 compiler=Compiler()
-text="fish jump;fish domath + 5 6; jump fish "
+text="Number x 10;fish domath + x 6; fish jump ; fish grow; fish shrink;"
 s=text.split(";")
+s=s[:len(s)-1]
+
+
+
 for line in s:
     compiler.compile(line)
