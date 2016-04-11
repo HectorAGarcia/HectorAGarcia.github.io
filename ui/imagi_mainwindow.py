@@ -178,8 +178,9 @@ class Ui_MainWindow(QMainWindow):
     scene editor tab.
     """
     def apply_scene_changes(self):
-        self.setSelectedCharactersAsActive()
         self.displaySelectedBackground()
+        self.setSelectedCharactersAsActive()
+        self.setUnselectedCharactersAsInactive()
 
     """
     Function to get the text from the text editor.
@@ -227,6 +228,12 @@ class Ui_MainWindow(QMainWindow):
         self.characters.append(self.fishButton)
         self.characters.append(self.dogButton)
         self.characters.append(self.lionButton)
+        # Create the characters
+        self.fishCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
+        self.dogCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
+        self.dogCharacter.characterLabel.setVisible(False)
+        self.lionCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
+        self.lionCharacter.characterLabel.setVisible(False)
 
     """
     Function to setup the backgrounds available for the user to select
@@ -277,26 +284,27 @@ class Ui_MainWindow(QMainWindow):
     def setSelectedCharactersAsActive(self):
         for character in self.characters:
             if character.isChecked() and character.text() == 'Fish':
-                self.fishCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Fish', 'Media/fish.png', 20, 525, 70, 70))
                 self.activeCharacters.append(self.fishCharacter)
-                self.fishCharacter.setActive(True)
-            #elif character in self.activeCharacters and character.text() == 'Fish':
-             #   self.activeCharacters.remove(self.fishCharacter)
-              #  self.fishCharacter.setActive(False)
+                self.fishCharacter.characterLabel.setVisible(True)
             if character.isChecked() and character.text() == 'Dog':
-                self.dogCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Dog', 'Media/dog.png', 120, 525, 70, 70))
                 self.activeCharacters.append(self.dogCharacter)
-                self.dogCharacter.setActive(True)
-            #elif character in self.activeCharacters and character.text() == 'Dog':
-             #   self.activeCharacters.remove(self.dogCharacter)
-              #  self.dogCharacter.setActive(False)
+                self.dogCharacter.characterLabel.setVisible(True)
             if character.isChecked() and character.text() == 'Lion':
-                self.lionCharacter = imagi_character.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
                 self.activeCharacters.append(self.lionCharacter)
-                self.lionCharacter.setActive(True)
-            #elif character in self.activeCharacters and character.text() == 'Lion':
-             #   self.activeCharacters.remove(self.lionCharacter)
-              #  self.lionCharacter.setActive(False)
+                self.lionCharacter.characterLabel.setVisible(True)
+
+    def setUnselectedCharactersAsInactive(self):
+        for character in self.characters:
+            if not character.isChecked() and character.text() == 'Fish':
+                self.fishCharacter.characterLabel.setVisible(False)
+            if not character.isChecked() and character.text() == 'Dog':
+                self.dogCharacter.characterLabel.setVisible(False)
+            if not character.isChecked() and character.text() == 'Lion':
+                self.lionCharacter.characterLabel.setVisible(False)
+        # We need at least one character to be active though so let's put fish as default if nothing else is active
+        if not self.characters[0].isChecked() and not self.characters[1].isChecked() and not self.characters[2].isChecked():
+            self.characters[0].setChecked(True)
+            self.setSelectedCharactersAsActive()
 
     """
     Function to update the scene according to default editor selectables
