@@ -31,7 +31,7 @@ class CommandCheck():
 
 
 """
--------------------------Command Class------------------------------------------------
+ -------------------------Command Class------------------------------------------------
 """
 class Command():
     def __init__(self,Name,nAtributes,executable):
