@@ -13,6 +13,7 @@ import imagi_character
 import sys
 # ----------------------------------------
 
+
 from PyQt4 import QtCore, QtGui
 
 try:
