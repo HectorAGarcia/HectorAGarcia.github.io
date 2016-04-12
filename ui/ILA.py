@@ -146,6 +146,8 @@ def walkexe(tokens):
 
     window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
 
+
+
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
         print sum(tokens[3].getValue())
@@ -268,10 +270,10 @@ class Tokenizer():
 
     #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
-        self.characters=["fish",'lion','bird']
+        self.characters=["fish",'lion','dog']
         self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath']
         self.atributes=["right",'left']
-        self.operators=["+","-","*"]
+        self.operators=["+","-","*",'/']
 
     #check if the token is Number type
     def if_Number(self,token):

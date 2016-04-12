@@ -211,6 +211,7 @@ class Ui_MainWindow(QMainWindow):
     """
     def run_code(self):
         self.group= QtCore.QSequentialAnimationGroup()
+        self.reset_character_labels()
         code=self.get_text()
         code1=str(code)
         lines=code1.split(";")
@@ -248,6 +249,11 @@ class Ui_MainWindow(QMainWindow):
 
     def getAnimatorsDict(self):
         return self.animators
+
+    def reset_character_labels(self):
+        self.characterDICT["fish"].setGeometry(QtCore.QRect(20, 525, 70, 70))
+        self.characterDICT["dog"].setGeometry(QtCore.QRect(120, 525, 70, 70))
+        self.characterDICT["lion"].setGeometry(QtCore.QRect(220, 525, 100, 100))
 
     """
     -----------------------------------------------------------------------------
