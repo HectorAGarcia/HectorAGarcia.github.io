@@ -38,6 +38,7 @@ class Ui_MainWindow(QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.setupUi(self)
+        self.lastAnim=None
         self.characters = []
         self.activeCharacters = []
         self.animators={}
@@ -214,7 +215,12 @@ class Ui_MainWindow(QMainWindow):
         code= self.clean_code(lines)
         for line in code:
              self.compiler.compile(line)#compile line
-        self.group.start() #start animations
+        i=0
+        self.group.start()
+
+
+
+
 
     """
     Function to clean  new lines from code....
