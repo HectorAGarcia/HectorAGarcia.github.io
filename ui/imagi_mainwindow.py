@@ -11,6 +11,10 @@ from PyQt4.QtGui import *
 import imagi_syntax
 import imagi_character_class
 import sys
+from ILA import *
+
+
+
 # ----------------------------------------
 
 
@@ -42,7 +46,12 @@ class Ui_MainWindow(QMainWindow):
         self.backgrounds = []
         self.setBackgrounds()
         self.default_scene()
+        self.animations={} #animations dictionary
+        self.group= QtCore.QSequentialAnimationGroup() #Animation group
         self.animation = None # The animation object, do not change
+        set_window(self) #set a reference to the main window in the ILA
+        self.compiler=Compiler()
+        self.compiler.set_comp(self)
     # ----------------------------------
 
 
@@ -170,7 +179,7 @@ class Ui_MainWindow(QMainWindow):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.sceneEditorTab), _translate("MainWindow", "Scene Editor", None))
         self.imagineButton.setText(_translate("MainWindow", "IMAGINE", None))
         # For a button action just do .clicked.connect(self.definedfunction) like in the following example -Edgardo
-        self.imagineButton.clicked.connect(self.analize_animation)
+        self.imagineButton.clicked.connect(self.run_code)
         self.applySceneChangesButton.clicked.connect(self.apply_scene_changes)
 
     # Functions not made by the generator
@@ -191,12 +200,51 @@ class Ui_MainWindow(QMainWindow):
         return self.textEdit.toPlainText()
 
     """
-    Function to analize the animations to be done, analizes the input code.
+    ------------------ New ----------------------------------------
     """
-    def analize_animation(self):
-        raw_code = self.get_text() # We must get the raw text first
-        self.moveRight(self.fishCharacter.characterLabel) # Testing move right animation
-        # to do....
+
+    """
+    Function to run the code
+    """
+    def run_code(self):
+        code=self.get_text()
+        code1=str(code)
+        lines=code1.split(";")
+        code= self.clean_code(lines)
+        for line in code:
+             self.compiler.compile(line)#compile line
+        self.group.start() #start animations
+
+    """
+    Function to clean  new lines from code....
+    """
+    def clean_code(self, lines):
+        ctr=[]
+        for line in lines:
+            str=""
+            list=line.split("\n")
+            for item in list:
+                if item !="":
+                    str=item
+            if str !="":
+                ctr.append(str)
+        return ctr
+
+    """
+    Function to return the main window compiler instance
+    """
+    def get_window_compiler(self):
+        return self.compiler
+
+    """
+    Function to return the character dictionary
+    """
+    def get_characters_dict(self):
+        return self.characterDICT
+
+    """
+    -----------------------------------------------------------------------------
+    """
 
     """
     Function to setup the chracters available for the user to select
@@ -237,6 +285,10 @@ class Ui_MainWindow(QMainWindow):
         self.dogCharacter.characterLabel.setVisible(False)
         self.lionCharacter = imagi_character_class.ImagiCharacter(self.addCharacterToScene('Lion', 'Media/lion.png', 220, 525, 100, 100))
         self.lionCharacter.characterLabel.setVisible(False)
+
+        #Create a dictionary containing all characters
+        self.characterDICT={"fish":self.fishCharacter.characterLabel,"dog":self.dogCharacter.characterLabel,"lion":self.lionCharacter.characterLabel}
+
 
     """
     Function to setup the backgrounds available for the user to select
@@ -327,18 +379,38 @@ class Ui_MainWindow(QMainWindow):
     """
     Animation Functions
     """
+
     def moveRight(self, characterLabel):
         animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationMoveRight.setDuration(1000)
         x1 = characterLabel.x()
+
         x2 = characterLabel.x() + 100
         y1 = characterLabel.y()
         w1 = characterLabel.width()
         h1 = characterLabel.height()
         animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
         animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
-        animationMoveRight.start()
-        self.animation = animationMoveRight # assign the animation object, this specific animation to be performed, VERY IMPORTANT(will not work without)
+        characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+    def moveLeft(self,characterLabel):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(1000)
+        x1 = characterLabel.x()
+
+        x2 = characterLabel.x() - 100
+        y1 = characterLabel.y()
+        w1 = characterLabel.width()
+        h1 = characterLabel.height()
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])

@@ -1,3 +1,8 @@
+
+from imagi_mainwindow import *
+from PyQt4 import *
+
+
 """
 ---------------------------------Command Check -------------------------------------------
 """
@@ -85,6 +90,7 @@ class CommandProccesor():
         self.addCommand("grow",0,growexe)
         self.addCommand("shrink",0,shrinkexe)
         self.addCommand("flip",0,flipexe)
+        self.addCommand("walk",1,walkexe)
 
 
 """
@@ -105,6 +111,21 @@ def shrinkexe(tokens):
 
 def flipexe(tokens):
     print tokens[0].getValue()+" Flip!"
+
+def walkexe(tokens):
+
+    characterDICT=window.get_characters_dict() # get window character dictionary
+
+    if tokens[2].getValue()=="right":
+        window.animations[len(window.animations)]=window.moveRight(characterDICT[tokens[0].getValue()])#add to the dictionary of animations the created QPropertyAnimation
+    else:
+        window.animations[len(window.animations)]=window.moveLeft(characterDICT[tokens[0].getValue()])#add to the dictionary of animations the created QPropertyAnimation
+
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
+
+
+
+
 
 
 def domathexe(tokens):
@@ -135,7 +156,7 @@ def mult(items):
     return "mult"
 
 def div(items):
-    return "division"
+    pass
 
 def sum(items):
     sum=0
@@ -329,16 +350,18 @@ class Compiler():
         self.loadValidStatements()
         self.cmdPC= CommandProccesor()
 
+    def set_comp(self,window):
+        set_compiler(window.get_window_compiler())
 
     # -loadValidStatements: define the statements accepted
     def loadValidStatements(self):
-        self.statements=[]
+        self.statements=[] #List of staments that are accepted
         statement1=['character','command','atribute']
         statement2=['character','command']
         statement3=['Word','Name','String']
         statement4=['Number','Name','Value']
         statement5=['character','command','Operator','List']
-        self.statements.append(statement1)
+        self.statements.append(statement1) #add statement to list
         self.statements.append(statement2)
         self.statements.append(statement3)
         self.statements.append(statement4)
@@ -447,22 +470,21 @@ class Interrupt():
         if len(items)> 3:
             if instance.validateOP(items[2]):
                 tokens.append(instance.createToken(items[2],"Operator"))
-                for item in items[3:]:
-                     if item !="":
-                         list.append(item)
-                tokens.append(instance.createToken(list,"List"))
+                if len(items) == 5:
+                      for item in items[3:]:
+                          if item !="":
+                              list.append(item)
+                      tokens.append(instance.createToken(list,"List"))
         if len(tokens) < 3:
             tokens.append(instance.createToken("not valid","String"))
 
+def set_window(w):
+    global window
+    window = w
 
 
 
-compiler=Compiler()
-text="Number x 10;fish domath + x 6; fish jump ; fish grow; fish shrink;"
-s=text.split(";")
-s=s[:len(s)-1]
+def set_compiler(wcompiler):
+    global  compiler
+    compiler = wcompiler
 
-
-
-for line in s:
-    compiler.compile(line)
