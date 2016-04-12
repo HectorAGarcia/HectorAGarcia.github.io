@@ -3,6 +3,7 @@ from imagi_mainwindow import *
 from PyQt4 import *
 
 
+
 """
 ---------------------------------Command Check -------------------------------------------
 """
@@ -74,6 +75,11 @@ class CommandProccesor():
     def execute(self, cmd, natributes,tokens):
         valid=self.cmdcheck.validCommand(cmd,natributes)
         if valid=="":
+            if cmd=="turn":
+                window.run_partial()
+                window.turn(window.characterDICT[tokens[0].getValue()].characterLabel,tokens[0].getValue())
+
+            else:
                 self.commands[cmd].getExe()(tokens)
         else:
             print valid
@@ -92,6 +98,7 @@ class CommandProccesor():
         self.addCommand("flip",0,flipexe)
         self.addCommand("walk",1,walkexe)
         self.addCommand("run",1,runexe)
+        self.addCommand("turn",0,turnexe)
 
 
 """
@@ -100,9 +107,9 @@ class CommandProccesor():
 
 def jumpexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()],"up")
+    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()].characterLabel,"up")
     window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
-    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()],"down")
+    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()].characterLabel,"down")
     window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def singexe(tokens):
@@ -110,25 +117,31 @@ def singexe(tokens):
 
 def growexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-    window.animations[len(window.animations)]=window.growCharacter(characterDICT[tokens[0].getValue()])
+    window.animations[len(window.animations)]=window.growCharacter(characterDICT[tokens[0].getValue()].characterLabel)
     window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def shrinkexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-    window.animations[len(window.animations)]=window.shrinkCharacter(characterDICT[tokens[0].getValue()])
+    window.animations[len(window.animations)]=window.shrinkCharacter(characterDICT[tokens[0].getValue()].characterLabel)
     window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def flipexe(tokens):
     print tokens[0].getValue()+" Flip!"
 
+def turnexe(tokens):
+    characterDICT=window.get_characters_dict() # get window character dictionary
+    window.animations[len(window.animations)]=window.turn(characterDICT[tokens[0].getValue()].characterLabel,tokens[0].getValue())
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
+
+
 def runexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
 
     if tokens[2].getValue()=="right":
-        window.animations[len(window.animations)]=window.runAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())
+        window.animations[len(window.animations)]=window.runAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())
 
     else:
-        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
         #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
 
     window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
@@ -138,15 +151,13 @@ def walkexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
 
     if tokens[2].getValue()=="right":
-        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
         #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveRight()
     else:
-        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
         #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
 
     window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
-
-
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
@@ -270,10 +281,10 @@ class Tokenizer():
 
     #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
-        self.characters=["fish",'lion','dog']
-        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath']
+        self.characters=["fish",'lion','bird']
+        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn"]
         self.atributes=["right",'left']
-        self.operators=["+","-","*",'/']
+        self.operators=["+","-","*"]
 
     #check if the token is Number type
     def if_Number(self,token):
