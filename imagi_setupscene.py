@@ -20,8 +20,8 @@ class Window(QWidget):
         self.show()
 
     def setAspect(self):
-        self.setGeometry(200,200,800,600)
-        self.setFixedSize(800,600)
+        self.setGeometry(800,800,800,600)
+        self.setFixedSize(700,250)
         self.setWindowTitle("IMAGI")
         icon = QtGui.QIcon("IMAGI-Logo-S.png")
         self.setWindowIcon(icon)
@@ -132,6 +132,8 @@ class Window(QWidget):
             self.setCharacterLabel("right",self.characters[0])
 
         self.imagecount=newImageCount
+        #self.moveimageAnimation(self.characters[self.imagecount], "right")
+        self.jumpAnimation(self.characters[self.imagecount])
 
     def PrevCharacter(self):
         newImageCount=0
@@ -161,6 +163,7 @@ class Window(QWidget):
             else:
                 self.setCharacterLabel("right",self.characters[0])
             self.imagecount=newImageCount
+            self.moveimageAnimation(self.characters[self.imagecount], "left")
     """
     def LastImage(self):
         if self.imagecount >0:
@@ -263,11 +266,29 @@ class Window(QWidget):
         self.characters=[]
         self.characters.append(name)"""
 
-    def moveimageAnimation(self,imageLabel):
-        for i in range(0,200):
-            imageLabel.move(imageLabel.x() + 1, imageLabel.y())
-            imageLabel.repaint()
-            app.processEvents()
+    def moveimageAnimation(self,imageLabel,direction):
+        if direction=="right":
+            for i in range(0,30):
+                imageLabel.move(imageLabel.x() + 4, imageLabel.y())
+                imageLabel.repaint()
+                app.processEvents()
+        elif direction=="left":
+            for i in range(0,30):
+                imageLabel.move(imageLabel.x() - 4, imageLabel.y())
+                imageLabel.repaint()
+                app.processEvents()
+    def jumpAnimation(self,imageLabel):
+            for i in range(0,20):
+                imageLabel.move(imageLabel.x(), imageLabel.y()-4)
+                imageLabel.repaint()
+                app.processEvents()
+            for i in range(0,20):
+                imageLabel.move(imageLabel.x(), imageLabel.y()+4)
+                imageLabel.repaint()
+                app.processEvents()
+    def shrink(self,imageLabel):
+        pass
+
 
 
 app = QtGui.QApplication(sys.argv)

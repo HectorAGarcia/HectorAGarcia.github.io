@@ -32,7 +32,6 @@ class Animator():
         animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
 
-        app.processEvents()
         return  animationMoveRight
     """
     def moveAnimation(self,imageLabel,direction):
@@ -79,7 +78,6 @@ class Animator():
         animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
 
-        app.processEvents()
         return  animationMoveRight
     """
     def jumpAnimation(self,imageLabel):
@@ -114,7 +112,6 @@ class Animator():
         animationMoveRight.setEndValue(QtCore.QRect(x2, y2, w1, h1)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x2, y2, w1, h1)) #Change label x coordinate
 
-        app.processEvents()
         return  animationMoveRight
 
     def shrinkCharacter(self,characterLabel):
@@ -132,7 +129,6 @@ class Animator():
         animationMoveRight.setEndValue(QtCore.QRect(x1, y1, w2, h2)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x1, y1, w2, h2)) #Change label x coordinate
 
-        app.processEvents()
         return  animationMoveRight
 
     def growCharacter(self,characterLabel):
@@ -150,7 +146,6 @@ class Animator():
         animationMoveRight.setEndValue(QtCore.QRect(x1, y1, w2, h2)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x1, y1, w2, h2)) #Change label x coordinate
 
-        app.processEvents()
         return  animationMoveRight
 
 
@@ -198,5 +193,5 @@ class Animator():
         self.jumpAnimation(self.character,"up")
         self.jumpAnimation(self.character,"down")
 
-    app = QtGui.QApplication([])
+
 

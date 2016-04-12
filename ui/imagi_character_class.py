@@ -1,3 +1,7 @@
+from PyQt4.uic.uiparser import QtGui
+
+
+
 class ImagiCharacter:
     """Base class for character in IMAGI"""
     active = False
@@ -13,3 +17,4 @@ class ImagiCharacter:
     # Sets the character as active or not in the scene
     def setActive(self, boolean):
         self.active = boolean
+
