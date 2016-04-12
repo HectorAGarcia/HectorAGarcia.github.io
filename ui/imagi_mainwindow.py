@@ -8,6 +8,7 @@
 
 # ----------------------------------------
 from PyQt4.QtGui import *
+import AnimatorClass
 import imagi_syntax
 import imagi_character_class
 import sys
@@ -42,6 +43,7 @@ class Ui_MainWindow(QMainWindow):
         self.setupUi(self)
         self.characters = []
         self.activeCharacters = []
+       # self.animators={}
         self.setCharacters()
         self.backgrounds = []
         self.setBackgrounds()
@@ -193,6 +195,7 @@ class Ui_MainWindow(QMainWindow):
         self.setSelectedCharactersAsActive()
         self.setUnselectedCharactersAsInactive()
 
+
     """
     Function to get the text from the text editor.
     """
@@ -242,6 +245,9 @@ class Ui_MainWindow(QMainWindow):
     def get_characters_dict(self):
         return self.characterDICT
 
+    def getAnimatorsDict(self):
+        return self.animators
+
     """
     -----------------------------------------------------------------------------
     """
@@ -288,6 +294,7 @@ class Ui_MainWindow(QMainWindow):
 
         #Create a dictionary containing all characters
         self.characterDICT={"fish":self.fishCharacter.characterLabel,"dog":self.dogCharacter.characterLabel,"lion":self.lionCharacter.characterLabel}
+        self.animators={"fish":AnimatorClass.Animator(self.fishCharacter.characterLabel),"dog":AnimatorClass.Animator(self.fishCharacter.characterLabel),"lion":AnimatorClass.Animator(self.fishCharacter.characterLabel)}
 
 
     """
@@ -384,7 +391,6 @@ class Ui_MainWindow(QMainWindow):
         animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationMoveRight.setDuration(1000)
         x1 = characterLabel.x()
-
         x2 = characterLabel.x() + 100
         y1 = characterLabel.y()
         w1 = characterLabel.width()
@@ -405,6 +411,111 @@ class Ui_MainWindow(QMainWindow):
         y1 = characterLabel.y()
         w1 = characterLabel.width()
         h1 = characterLabel.height()
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+    def jumpAnimation(self,characterLabel,direction):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(200)
+        if direction=="up":
+            x1 = characterLabel.x()
+            x2 = characterLabel.x()
+            y1 = characterLabel.y()
+            y2 = characterLabel.y()-40
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        else:
+            x1 = characterLabel.x()
+            x2 = characterLabel.x()
+            y1 = characterLabel.y()
+            y2 = characterLabel.y()+40
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x2, y2, w1, h1)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x2, y2, w1, h1)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+    def shrinkCharacter(self,characterLabel):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(500)
+        if characterLabel.height>30 and characterLabel.width>30:
+            x1 = characterLabel.x()
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+            w2 = characterLabel.width()-20
+            h2 = characterLabel.height()-20
+
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x1, y1, w2, h2)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x1, y1, w2, h2)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+    def growCharacter(self,characterLabel):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(500)
+        x1 = characterLabel.x()
+        y1 = characterLabel.y()
+        w1 = characterLabel.width()
+        h1 = characterLabel.height()
+        w2 = characterLabel.width()+20
+        h2 = characterLabel.height()+20
+
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x1, y1, w2, h2)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x1, y1, w2, h2)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+    def runAnimation(self,characterLabel,direction):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(500)
+        if direction=="right":
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() + 100
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        else:
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() - 100
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
+
+        app.processEvents()
+        return  animationMoveRight
+
+
+    def moveAnimation(self, characterLabel, direction):
+        animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationMoveRight.setDuration(1000)
+        if direction=="right":
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() + 100
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        else:
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() - 100
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
         animationMoveRight.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
         animationMoveRight.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
         characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
