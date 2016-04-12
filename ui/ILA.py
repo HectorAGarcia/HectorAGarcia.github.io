@@ -91,6 +91,7 @@ class CommandProccesor():
         self.addCommand("shrink",0,shrinkexe)
         self.addCommand("flip",0,flipexe)
         self.addCommand("walk",1,walkexe)
+        self.addCommand("run",1,runexe)
 
 
 """
@@ -98,35 +99,52 @@ class CommandProccesor():
 """
 
 def jumpexe(tokens):
-    print tokens[0].getValue()+" jump!"
+    characterDICT=window.get_characters_dict() # get window character dictionary
+    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()],"up")
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
+    window.animations[len(window.animations)]=window.jumpAnimation(characterDICT[tokens[0].getValue()],"down")
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def singexe(tokens):
     print tokens[0].getValue()+" Sing!"
 
 def growexe(tokens):
-    print tokens[0].getValue()+" Grow!"
+    characterDICT=window.get_characters_dict() # get window character dictionary
+    window.animations[len(window.animations)]=window.growCharacter(characterDICT[tokens[0].getValue()])
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def shrinkexe(tokens):
-    print tokens[0].getValue()+" Shrink!"
+    characterDICT=window.get_characters_dict() # get window character dictionary
+    window.animations[len(window.animations)]=window.shrinkCharacter(characterDICT[tokens[0].getValue()])
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def flipexe(tokens):
     print tokens[0].getValue()+" Flip!"
+
+def runexe(tokens):
+    characterDICT=window.get_characters_dict() # get window character dictionary
+
+    if tokens[2].getValue()=="right":
+        window.animations[len(window.animations)]=window.runAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())
+
+    else:
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
+
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
 
 def walkexe(tokens):
 
     characterDICT=window.get_characters_dict() # get window character dictionary
 
     if tokens[2].getValue()=="right":
-        window.animations[len(window.animations)]=window.moveRight(characterDICT[tokens[0].getValue()])#add to the dictionary of animations the created QPropertyAnimation
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveRight()
     else:
-        window.animations[len(window.animations)]=window.moveLeft(characterDICT[tokens[0].getValue()])#add to the dictionary of animations the created QPropertyAnimation
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()],tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
 
     window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
-
-
-
-
-
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
