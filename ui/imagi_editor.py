@@ -4,6 +4,7 @@ import imagi_syntax
 
 app = QtGui.QApplication([])
 
+
 # Main Window
 window = QMainWindow()
 

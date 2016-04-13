@@ -2,6 +2,7 @@ import sys
 from PyQt4.QtCore import QRegExp
 from PyQt4.QtGui import QColor, QTextCharFormat, QFont, QSyntaxHighlighter
 
+
 def imagiformat(color, style=''):
     _color = QColor()
     _color.setNamedColor(color)

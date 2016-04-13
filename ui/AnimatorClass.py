@@ -4,6 +4,7 @@ from PyQt4.QtGui import QWidget, QMainWindow
 import imagi_mainwindow
 
 
+
 class Animator():
     def __init__(self, label):
         self.defaultDimW= 128

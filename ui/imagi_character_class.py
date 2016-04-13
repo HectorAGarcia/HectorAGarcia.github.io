@@ -2,6 +2,7 @@ from PyQt4.uic.uiparser import QtGui
 
 
 
+
 class ImagiCharacter:
     """Base class for character in IMAGI"""
     active = False
