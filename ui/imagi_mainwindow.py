@@ -226,6 +226,7 @@ class Ui_MainWindow(QMainWindow):
         for line in code:
              self.compiler.compile(line)#compile line
         self.group.start()
+        self.reset_character_labels()
 
 
 
