@@ -102,6 +102,7 @@ class CommandProccesor():
         self.addCommand("turn",0,turnexe)
         self.addCommand("dance",0,danceexe)
         self.addCommand("repeat",0,repeatexe)
+        self.addCommand("endrepeat",0,endrepeatexe)
 
 
 """
@@ -183,7 +184,20 @@ def walkexe(tokens):
 
 
 def repeatexe(tokens):
-    print "repeat "+tokens[1].getValue()
+    compiler.repeatCount=tokens[1].getValue()
+    compiler.repeatFlag=True
+
+
+def endrepeatexe(tokens):
+    if len(compiler.repeatLines)!=0:
+        compiler.repeatFlag=False
+        l=int(compiler.repeatCount)
+        for i in range(0,l):
+            for line in compiler.repeatLines:
+                compiler.compile(line)
+        compiler.repeatCount=0
+        compiler.repeatLines=[]
+
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
@@ -359,6 +373,8 @@ class Tokenizer():
         if self.if_Number(token):
             self.interrupt.raiseFlag("Number")
             return self.createToken(token,"Number")
+        if self.if_Close(token):
+            return self.createToken(token,"CLOSE")
         return ''
 
     #setUpTokenizer: setup the tokens to be identified
@@ -367,6 +383,13 @@ class Tokenizer():
         self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance",'repeat']
         self.atributes=["right",'left']
         self.operators=["+","-","*","/"]
+        self.closer=["endrepeat"]
+
+
+    def if_Close(self,token):
+        if token =="endrepeat":
+            return True
+        return False
 
     #check if the token is Number type
     def if_Number(self,token):
@@ -486,6 +509,7 @@ class Compiler():
         self.statements.append(statement4)
         self.statements.append(statement5)
         self.statements.append(statement7)
+        self.statements.append(statement8)
 
     # -checkIFValidStatement : check if the statement given is valid
     def checkIFValidStatement(self,tokens):
@@ -510,12 +534,14 @@ class Compiler():
     def compile(self, line):
         tokens=self.tokenizer.tokenize(line)
         if self.checkIFValidStatement(tokens):
+            if (not self.repeatFlag) or (tokens[0].getID()=="CLOSE"):
+                index=self.find_cmd(tokens)
 
+                if index!=-1 or tokens[0].getID()=="CLOSE":
+                    self.cmdPC.execute(tokens[index].getValue(),self.count_atributes(tokens),tokens)
+            else:
+                self.repeatLines.append(line)
 
-            index=self.find_cmd(tokens)
-
-            if index!=-1:
-                self.cmdPC.execute(tokens[index].getValue(),self.count_atributes(tokens),tokens)
 
         else:
             print "Not valid statement!"
