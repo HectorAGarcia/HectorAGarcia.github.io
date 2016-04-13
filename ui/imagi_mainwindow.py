@@ -13,6 +13,11 @@ import imagi_syntax
 import imagi_character_class
 import sys
 from ILA import *
+import time
+import threading
+from threading import Thread
+
+
 
 # ----------------------------------------
 
@@ -46,6 +51,7 @@ class Ui_MainWindow(QMainWindow):
         self.backgrounds = []
         self.setBackgrounds()
         self.default_scene()
+        self.sum=0
         self.animations={} #animations dictionary
         ##self.group= QtCore.QSequentialAnimationGroup() #Animation group
         self.animation = None # The animation object, do not change
@@ -208,14 +214,37 @@ class Ui_MainWindow(QMainWindow):
     """
     def run_code(self):
         self.group= QtCore.QSequentialAnimationGroup()
+        self.group2=QtCore.QSequentialAnimationGroup()
+        self.finish=False;
+        self.count=0
+        self.reset_character_labels()
         code=self.get_text()
         code1=str(code)
         lines=code1.split(";")
         code= self.clean_code(lines)
         for line in code:
              self.compiler.compile(line)#compile line
-        i=0
         self.group.start()
+
+
+
+
+
+
+    def threaded_function(self,args):
+        time.sleep(float(self.count/2))
+
+
+
+
+    def run(self):
+        pass
+       # self.group.start()
+
+
+
+        
+
 
 
 
@@ -252,9 +281,9 @@ class Ui_MainWindow(QMainWindow):
         return self.animators
 
     def reset_character_labels(self):
-        self.characterDICT["fish"].setGeometry(QtCore.QRect(20, 525, 70, 70))
-        self.characterDICT["dog"].setGeometry(QtCore.QRect(120, 525, 70, 70))
-        self.characterDICT["lion"].setGeometry(QtCore.QRect(220, 525, 100, 100))
+        self.characterDICT["fish"].characterLabel.setGeometry(QtCore.QRect(20, 525, 70, 70))
+        self.characterDICT["dog"].characterLabel.setGeometry(QtCore.QRect(120, 525, 70, 70))
+        self.characterDICT["lion"].characterLabel.setGeometry(QtCore.QRect(220, 525, 100, 100))
 
     """
     -----------------------------------------------------------------------------
@@ -454,7 +483,9 @@ class Ui_MainWindow(QMainWindow):
 
     def jumpAnimation(self, characterLabel, direction):
         animationJump = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        self.count+=1
         if direction=="up":
+
             animationJump.setDuration(200)
             x1 = characterLabel.x()
             x2 = characterLabel.x()
@@ -480,6 +511,7 @@ class Ui_MainWindow(QMainWindow):
     def shrinkCharacter(self, characterLabel):
         animationShrink = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationShrink.setDuration(500)
+        self.count+=1
         if characterLabel.height>30 and characterLabel.width>30:
             x1 = characterLabel.x()
             y1 = characterLabel.y()
@@ -496,6 +528,7 @@ class Ui_MainWindow(QMainWindow):
     def flip(self, characterLabel):
         animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationMoveRight.setDuration(500)
+        self.count+=1
         x1 = characterLabel.x()
         y1 = characterLabel.y()
         w1 = characterLabel.width()
@@ -510,6 +543,7 @@ class Ui_MainWindow(QMainWindow):
     def growCharacter(self,characterLabel):
         animationGrow = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationGrow.setDuration(500)
+        self.count+=1
         x1 = characterLabel.x()
         y1 = characterLabel.y()
         w1 = characterLabel.width()
@@ -526,6 +560,7 @@ class Ui_MainWindow(QMainWindow):
     def runAnimation(self, characterLabel, direction):
         animationRun = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationRun.setDuration(500)
+        self.count+=1
         if direction=="right":
             x1 = characterLabel.x()
             x2 = characterLabel.x() + 100
@@ -547,6 +582,8 @@ class Ui_MainWindow(QMainWindow):
     def moveAnimation(self, characterLabel, direction):
         animationMove = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationMove.setDuration(1000)
+
+        self.count+=1
         if direction=="right":
             x1 = characterLabel.x()
             x2 = characterLabel.x() + 100

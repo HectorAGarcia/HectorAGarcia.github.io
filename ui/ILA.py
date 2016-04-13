@@ -117,13 +117,17 @@ def singexe(tokens):
 
 def growexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-    window.animations[len(window.animations)]=window.growCharacter(characterDICT[tokens[0].getValue()].characterLabel)
-    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
+    h=characterDICT[tokens[0].getValue()].characterLabel.height()
+    if h<75:
+        window.animations[len(window.animations)]=window.growCharacter(characterDICT[tokens[0].getValue()].characterLabel)
+        window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def shrinkexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-    window.animations[len(window.animations)]=window.shrinkCharacter(characterDICT[tokens[0].getValue()].characterLabel)
-    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
+    h=characterDICT[tokens[0].getValue()].characterLabel.height()
+    if h>65:
+        window.animations[len(window.animations)]=window.shrinkCharacter(characterDICT[tokens[0].getValue()].characterLabel)
+        window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def flipexe(tokens):
     print tokens[0].getValue()+" Flip!"
@@ -136,28 +140,29 @@ def turnexe(tokens):
 
 def runexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
-
-    if tokens[2].getValue()=="right":
+    x=characterDICT[tokens[0].getValue()].characterLabel.x()
+    if tokens[2].getValue()=="right"and  x<(798-100):
         window.animations[len(window.animations)]=window.runAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())
-
-    else:
+        window.group.addAnimation(window.animations[len(window.animations)-1])
+    if tokens[2].getValue()=="left" and x>100:
         window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
-        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
+        window.group.addAnimation(window.animations[len(window.animations)-1])
 
-    window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
+
 
 def walkexe(tokens):
 
     characterDICT=window.get_characters_dict() # get window character dictionary
-
-    if tokens[2].getValue()=="right":
+    x=characterDICT[tokens[0].getValue()].characterLabel.x()
+    if tokens[2].getValue()=="right" and x<(798-100):
         window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
-        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveRight()
-    else:
-        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
-        #window.animations[len(window.animations)]=animatorsDict[tokens[0].getValue()].moveLeft()
+        window.group.addAnimation(window.animations[len(window.animations)-1])
 
-    window.group.addAnimation(window.animations[len(window.animations)-1])#add the QPropertyAnimation to the Sequential Animation Group
+    if tokens[2].getValue()=="left" and x>100:
+        window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
+        window.group.addAnimation(window.animations[len(window.animations)-1])
+
+
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
