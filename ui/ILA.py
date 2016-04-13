@@ -203,13 +203,67 @@ def check_Num_Exist(name,list):
 #Math operations:
 
 def sub(items):
-    return "subtraction"
+    sub=0
+    list=compiler.get_TokenizerNUMVAR()
+    try:
+        sub=int(items[0])
+    except ValueError:
+        if check_Num_Exist(items[0],list):
+            sub=int(list[items[0]])
+        else:
+            return "Not valid variable: "+items[0]
+
+    i=0
+    try:
+       i=int(items[1])
+    except ValueError:
+        if check_Num_Exist(items[1],list):
+            i=int(list[items[1]])
+        else:
+            return "Not valid variable: "+items[1]
+
+    sub=sub-i
+    return sub
+
 
 def mult(items):
-    return "mult"
+    mult =1
+    i =1
+    list=compiler.get_TokenizerNUMVAR()
+    for item in items:
+        i=1
+        try:
+            i=int(item)
+        except ValueError:
+            if check_Num_Exist(item,list):
+                i=int(list[item])
+            else:
+                return "Not valid variable: "+item
+        mult=mult*i
+    return mult
 
 def div(items):
-    pass
+    d=0
+    list=compiler.get_TokenizerNUMVAR()
+    try:
+        d=int(items[0])
+    except ValueError:
+        if check_Num_Exist(items[0],list):
+            d=int(list[items[0]])
+        else:
+            return "Not valid variable: "+items[0]
+
+    i=0
+    try:
+       i=int(items[1])
+    except ValueError:
+        if check_Num_Exist(items[1],list):
+            i=int(list[items[1]])
+        else:
+            return "Not valid variable: "+items[1]
+
+    d=d-i
+    return d
 
 def sum(items):
     sum=0
@@ -306,7 +360,7 @@ class Tokenizer():
         self.characters=["fish",'lion','dog']
         self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance"]
         self.atributes=["right",'left']
-        self.operators=["+","-","*"]
+        self.operators=["+","-","*","/"]
 
     #check if the token is Number type
     def if_Number(self,token):
@@ -527,7 +581,8 @@ class Interrupt():
                       for item in items[3:]:
                           if item !="":
                               list.append(item)
-                      tokens.append(instance.createToken(list,"List"))
+                      if len(list)==2:
+                          tokens.append(instance.createToken(list,"List"))
         if len(tokens) < 3:
             tokens.append(instance.createToken("not valid","String"))
 
