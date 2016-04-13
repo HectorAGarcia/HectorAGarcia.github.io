@@ -99,6 +99,7 @@ class CommandProccesor():
         self.addCommand("walk",1,walkexe)
         self.addCommand("run",1,runexe)
         self.addCommand("turn",0,turnexe)
+        self.addCommand("dance",0,danceexe)
 
 
 """
@@ -114,6 +115,24 @@ def jumpexe(tokens):
 
 def singexe(tokens):
     print tokens[0].getValue()+" Sing!"
+
+def danceexe(tokens):
+    slightMoveexe(tokens, "right")
+    slightMoveexe(tokens, "left")
+    jumpexe(tokens)
+    jumpexe(tokens)
+    slightMoveexe(tokens, "right")
+    slightMoveexe(tokens, "right")
+    slightMoveexe(tokens, "left")
+    slightMoveexe(tokens, "left")
+    shrinkexe(tokens)
+    growexe(tokens)
+    jumpexe(tokens)
+
+def slightMoveexe(tokens, direction):
+    characterDICT=window.get_characters_dict() # get window character dictionary
+    window.animations[len(window.animations)]=window.slightMove(characterDICT[tokens[0].getValue()].characterLabel, direction)
+    window.group.addAnimation(window.animations[len(window.animations)-1])#add to the dictionary of animations the created QPropertyAnimation
 
 def growexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
@@ -147,8 +166,6 @@ def runexe(tokens):
     if tokens[2].getValue()=="left" and x>100:
         window.animations[len(window.animations)]=window.moveAnimation(characterDICT[tokens[0].getValue()].characterLabel,tokens[2].getValue())#add to the dictionary of animations the created QPropertyAnimation
         window.group.addAnimation(window.animations[len(window.animations)-1])
-
-
 
 def walkexe(tokens):
 
@@ -286,8 +303,8 @@ class Tokenizer():
 
     #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
-        self.characters=["fish",'lion','bird']
-        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn"]
+        self.characters=["fish",'lion','dog']
+        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance"]
         self.atributes=["right",'left']
         self.operators=["+","-","*"]
 
