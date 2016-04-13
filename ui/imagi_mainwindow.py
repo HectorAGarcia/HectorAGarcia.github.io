@@ -452,6 +452,46 @@ class Ui_MainWindow(QMainWindow):
 
         return animationMoveRight
 
+    def dance(self,characterLabel):
+        self.slightMove(characterLabel,"right")
+        self.slightMove(characterLabel,"left")
+        self.jumpAnimation(characterLabel, "up")
+        self.jumpAnimation(characterLabel, "down")
+        self.jumpAnimation(characterLabel, "up")
+        self.jumpAnimation(characterLabel, "down")
+        self.slightMove(characterLabel,"right")
+        self.slightMove(characterLabel,"right")
+        self.slightMove(characterLabel,"left")
+        self.slightMove(characterLabel,"left")
+        self.shrinkCharacter(characterLabel)
+        self.growCharacter(characterLabel)
+        self.jumpAnimation(characterLabel, "up")
+        self.jumpAnimation(characterLabel, "down")
+
+
+
+    def slightMove(self, characterLabel, direction):
+        animationRun = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
+        animationRun.setDuration(500)
+        self.count+=1
+        if direction=="right":
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() + 50
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        else:
+            x1 = characterLabel.x()
+            x2 = characterLabel.x() - 50
+            y1 = characterLabel.y()
+            w1 = characterLabel.width()
+            h1 = characterLabel.height()
+        animationRun.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        animationRun.setEndValue(QtCore.QRect(x2, y1, w1, h1)) # QRect Properties after animation of characterLabel
+        characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
+
+        return animationRun
+
     def moveRight(self, characterLabel):
         animationMoveRight = QtCore.QPropertyAnimation(characterLabel, 'geometry') # Create the animation for specific characterLabel
         animationMoveRight.setDuration(1000)
