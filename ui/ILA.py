@@ -101,6 +101,7 @@ class CommandProccesor():
         self.addCommand("run",1,runexe)
         self.addCommand("turn",0,turnexe)
         self.addCommand("dance",0,danceexe)
+        self.addCommand("repeat",0,repeatexe)
 
 
 """
@@ -181,6 +182,8 @@ def walkexe(tokens):
         window.group.addAnimation(window.animations[len(window.animations)-1])
 
 
+def repeatexe(tokens):
+    print "repeat "+tokens[1].getValue()
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
@@ -342,6 +345,8 @@ class Tokenizer():
         if self.if_character(token):
             return self.createToken(token,"character")
         if self.if_command(token) and token != "domath":
+            if token =="repeat":
+                self.interrupt.raiseFlag("command")
             return self.createToken(token,"command")
         if self.if_atribute(token):
             return self.createToken(token,"atribute")
@@ -359,7 +364,7 @@ class Tokenizer():
     #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
         self.characters=["fish",'lion','dog']
-        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance"]
+        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance",'repeat']
         self.atributes=["right",'left']
         self.operators=["+","-","*","/"]
 
@@ -457,6 +462,9 @@ class Compiler():
         self.tokenizer=Tokenizer()
         self.loadValidStatements()
         self.cmdPC= CommandProccesor()
+        self.repeatLines=[]
+        self.repeatFlag=False
+        self.repeatCount=0
 
     def set_comp(self,window):
         set_compiler(window.get_window_compiler())
@@ -468,12 +476,16 @@ class Compiler():
         statement2=['character','command']
         statement3=['Word','Name','String']
         statement4=['Number','Name','Value']
+        statement7=['command','Value']
+        statement8=['CLOSE']
         statement5=['character','command','Operator','List']
+        statement6=['character','command','String']
         self.statements.append(statement1) #add statement to list
         self.statements.append(statement2)
         self.statements.append(statement3)
         self.statements.append(statement4)
         self.statements.append(statement5)
+        self.statements.append(statement7)
 
     # -checkIFValidStatement : check if the statement given is valid
     def checkIFValidStatement(self,tokens):
@@ -538,8 +550,8 @@ class Interrupt():
     def __init__(self):
         self.flag=0
         self.flagName=""
-        self.ISR={"Word":self.WordISR,"Math": self.MathISR,"Number":self.NumberISR}
-
+        self.ISR={"Word":self.WordISR,"Math": self.MathISR,"Number":self.NumberISR,"command":self.commandISR}
+        self.commandR={"repeat":self.repeatISR}
 
     def raiseFlag(self,name):
         self.flag=1
@@ -556,6 +568,23 @@ class Interrupt():
         self.ISR[self.flagName](instance,tokens,items)
 
 
+    def repeatISR(self,instance,tokens,items):
+        list=instance.NumberVariables
+        try:
+            i=int(items[1])
+            tokens.append(instance.createToken(items[1],"Value"))
+        except ValueError:
+            if check_Num_Exist(items[1],list):
+                tokens.append(instance.createToken(list[items[1]],"Value"))
+            else:
+                tokens.append(instance.createToken("not valid",'Error'))
+
+
+    def commandISR(self,instance,tokens,items):
+        self.commandR[tokens[len(tokens)-1].getValue()](instance,tokens,items)
+
+
+
 
     def NumberISR(self,instance,tokens,items):
         if len(items)==3:
@@ -570,7 +599,7 @@ class Interrupt():
             tokens.append(instance.createToken(items[1],"Name"))
             tokens.append(instance.toString(items))
             instance.WordVariables[items[1]]=tokens[len(tokens)-1].getValue()
-            print instance.getWordDict()
+
 
 
     def MathISR(self,instance,tokens,items):
@@ -585,7 +614,7 @@ class Interrupt():
                       if len(list)==2:
                           tokens.append(instance.createToken(list,"List"))
         if len(tokens) < 3:
-            tokens.append(instance.createToken("not valid","String"))
+            tokens.append(instance.createToken("not valid","Error"))
 
 def set_window(w):
     global window
