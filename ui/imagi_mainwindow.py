@@ -43,6 +43,13 @@ class Ui_MainWindow(QMainWindow):
     # Added By Edgardo.... not the generator
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
+        self.dialog = None
+        self.dialogs = []
+        self.dialogsCount = 0
+        self.dialogToShow = None
+        self.dialogTextLabel = None
+        self.dialogTextLabels = []
+
         self.setupUi(self)
         self.lastAnim=None
         self.characters = []
@@ -133,6 +140,7 @@ class Ui_MainWindow(QMainWindow):
         self.sceneBackground.setScaledContents(True)
         self.sceneBackground.setGeometry(QtCore.QRect(11, 332, 798, 289))
         self.sceneBackground.setObjectName(_fromUtf8("sceneBackground"))
+        self.generateDialog()
         # ----
 
         # Imagine Button ----
@@ -643,6 +651,72 @@ class Ui_MainWindow(QMainWindow):
         characterLabel.setGeometry(QtCore.QRect(x2, y1, w1, h1)) #Change label x coordinate
 
         return animationMove
+
+    def generateDialog(self):
+        x = 0
+        while x < 100:
+            self.dialog = QtGui.QLabel(self.centralwidget)
+            self.dialog.setScaledContents(True)
+            self.dialog.setGeometry(QtCore.QRect(406, 0, 0, 0))
+            self.dialogTextLabel = QtGui.QLabel(self.dialog)
+            self.dialogTextLabel.setGeometry(QtCore.QRect(150, 35, 1000, 20))
+            self.dialogTextLabels.append(self.dialogTextLabel)
+            self.dialogs.append(self.dialog)
+            x += 1
+        print self.dialogs
+
+    def decorateDialog(self, character, dialogText):
+        # Decorate the dialog
+        if character.characterName == "Fish":
+            print len(self.dialogs)
+            print self.dialogsCount
+            self.dialogs[self.dialogsCount].setObjectName(_fromUtf8("fishDialog"))
+            self.dialogs[self.dialogsCount].setPixmap(QtGui.QPixmap(_fromUtf8("Media/fish_dialog.png")))
+        if character.characterName == "Dog":
+            self.dialogs[self.dialogsCount].setObjectName(_fromUtf8("dogDialog"))
+            self.dialogs[self.dialogsCount].setPixmap(QtGui.QPixmap(_fromUtf8("Media/dog_dialog.png")))
+        if character.characterName == "Lion":
+            self.dialogs[self.dialogsCount].setObjectName(_fromUtf8("lionDialog"))
+            self.dialogs[self.dialogsCount].setPixmap(QtGui.QPixmap(_fromUtf8("Media/lion_dialog.png")))
+        self.dialogTextLabels[self.dialogsCount].setText(dialogText)
+
+    def makeDialogAppear(self, character, dialogText):# dialogText is a string, character is the character to say something
+        self.decorateDialog(character, dialogText)
+        self.dialogToShow = self.dialogs[self.dialogsCount]
+        print 'The dialog to show is: '
+        print self.dialogToShow
+        makeDialogAppear = QtCore.QPropertyAnimation(self.dialogToShow, 'geometry') # Create the animation for specific characterLabel
+        makeDialogAppear.setDuration(500)
+        x1 = self.dialogToShow.x()
+        x2 = 11
+        y1 = self.dialogToShow.y()
+        y2 = 332
+        w1 = self.dialogToShow.width()
+        w2 = 798
+        h1 = self.dialogToShow.height()
+        h2 = 100
+        makeDialogAppear.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        makeDialogAppear.setEndValue(QtCore.QRect(x2, y2, w2, h2)) # QRect Properties after animation of characterLabel
+        self.dialogToShow.setGeometry(QtCore.QRect(x2, y2, w2, h2)) #Change label x coordinate
+        return makeDialogAppear
+
+    def makeDialogDissappear(self):# dialogLabel is a characters dialogLabel
+        makeDialogDissappear = QtCore.QPropertyAnimation(self.dialogToShow, 'geometry') # Create the animation for specific characterLabel
+        makeDialogDissappear.setDuration(500)
+        x1 = self.dialogToShow.x()
+        x2 = 406
+        y1 = self.dialogToShow.y()
+        y2 = 0
+        w1 = self.dialogToShow.width()
+        w2 = 0
+        h1 = self.dialogToShow.height()
+        h2 = 0
+        makeDialogDissappear.setStartValue(QtCore.QRect(x1, y1 , w1, h1)) # Original QRect Properties of characterLabel
+        makeDialogDissappear.setEndValue(QtCore.QRect(x2, y2, w2, h2)) # QRect Properties after animation of characterLabel
+        self.dialogToShow.setGeometry(QtCore.QRect(x2, y2, w2, h2)) #Change label x coordinate
+        self.dialogsCount += 1
+        return makeDialogDissappear
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
