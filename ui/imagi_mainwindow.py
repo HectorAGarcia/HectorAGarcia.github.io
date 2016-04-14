@@ -49,7 +49,7 @@ class Ui_MainWindow(QMainWindow):
         self.activeCharacters = []
         self.animators={}
         self.setCharacters()
-        self.backgrounds = []
+        self.backgrounds = [] 
         self.setBackgrounds()
         self.default_scene()
         self.sum=0

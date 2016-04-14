@@ -103,11 +103,17 @@ class CommandProccesor():
         self.addCommand("dance",0,danceexe)
         self.addCommand("repeat",0,repeatexe)
         self.addCommand("endrepeat",0,endrepeatexe)
+        self.addCommand("say",0,sayexe)
+        self.addCommand("ask",0,sayexe)
+
 
 
 """
 -------------------------Command Executables------------------------------------------------
 """
+
+def sayexe(tokens):
+    print tokens[0].getValue()+" "+tokens[1].getValue()+": "+tokens[2].getValue()
 
 def jumpexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
@@ -312,6 +318,7 @@ class Tokenizer():
         self.interrupt=Interrupt()
         self.WordVariables={}
         self.NumberVariables={}
+        self.commandsToInterrupt=["repeat","say","ask"]
 
     #-line: code line to tokenize
     #-tokenize: identify tokens on a code line and return it
@@ -359,7 +366,7 @@ class Tokenizer():
         if self.if_character(token):
             return self.createToken(token,"character")
         if self.if_command(token) and token != "domath":
-            if token =="repeat":
+            if self.if_commandRaiseFlag(token):
                 self.interrupt.raiseFlag("command")
             return self.createToken(token,"command")
         if self.if_atribute(token):
@@ -380,10 +387,18 @@ class Tokenizer():
     #setUpTokenizer: setup the tokens to be identified
     def setUpTokenizer(self):
         self.characters=["fish",'lion','dog']
-        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance",'repeat']
+        self.commands=["sing","dance","jump","walk",'say','grow','shrink','flip','run','domath',"turn", "dance",'repeat','ask']
         self.atributes=["right",'left']
         self.operators=["+","-","*","/"]
         self.closer=["endrepeat"]
+
+
+
+    def if_commandRaiseFlag(self,token):
+        for item in self.commandsToInterrupt:
+            if token ==item:
+                return True
+        return False
 
 
     def if_Close(self,token):
@@ -510,6 +525,7 @@ class Compiler():
         self.statements.append(statement5)
         self.statements.append(statement7)
         self.statements.append(statement8)
+        self.statements.append(statement6)
 
     # -checkIFValidStatement : check if the statement given is valid
     def checkIFValidStatement(self,tokens):
@@ -577,7 +593,7 @@ class Interrupt():
         self.flag=0
         self.flagName=""
         self.ISR={"Word":self.WordISR,"Math": self.MathISR,"Number":self.NumberISR,"command":self.commandISR}
-        self.commandR={"repeat":self.repeatISR}
+        self.commandR={"repeat":self.repeatISR,"say":self.sayISR,"ask":self.sayISR}
 
     def raiseFlag(self,name):
         self.flag=1
@@ -592,6 +608,7 @@ class Interrupt():
 
     def executeISR(self, instance,tokens,items):
         self.ISR[self.flagName](instance,tokens,items)
+
 
 
     def repeatISR(self,instance,tokens,items):
@@ -626,6 +643,19 @@ class Interrupt():
             tokens.append(instance.toString(items))
             instance.WordVariables[items[1]]=tokens[len(tokens)-1].getValue()
 
+    def sayISR(self,instance,tokens, items):
+         if len(items) > 2:
+             if instance.checkifStringRule(items):
+                 tokens.append(instance.toString(items))
+             elif len(items)==3:
+                 try:
+
+                     s=instance.WordVariables[items[2]]
+                     tokens.append(instance.createToken(s,"String"))
+                 except KeyError:
+                     tokens.append(instance.createToken("not valid","Error"))
+         else:
+             tokens.append(instance.createToken("not valid","Error"))
 
 
     def MathISR(self,instance,tokens,items):
