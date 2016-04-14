@@ -210,13 +210,21 @@ def endrepeatexe(tokens):
 
 def domathexe(tokens):
     if tokens[2].getValue()=="+":
-        print sum(tokens[3].getValue())
+        s= sum(tokens[3].getValue())
+        tokens[2].setValue(str(tokens[3].getValue()[0])+"+"+str(tokens[3].getValue()[1])+"= "+s)
+        sayexe(tokens)
     elif tokens[2].getValue()=="-":
-        print sub(tokens[3].getValue())
+        s= sub(tokens[3].getValue())
+        tokens[2].setValue(str(tokens[3].getValue()[0])+"-"+str(tokens[3].getValue()[1])+"= "+s)
+        sayexe(tokens)
     elif tokens[2].getValue()=="*":
-        print mult(tokens[3].getValue())
+        s= mult(tokens[3].getValue())
+        tokens[2].setValue(str(tokens[3].getValue()[0])+"*"+str(tokens[4].getValue()[1])+"= "+s)
+        sayexe(tokens)
     else:
-        print div(tokens[3].getValue())
+        s= div(tokens[3].getValue())
+        tokens[2].setValue(str(tokens[3].getValue()[0])+"/"+str(tokens[4].getValue()[1])+"= "+s)
+        sayexe(tokens)
 
 
 #Check Variables existance
@@ -490,6 +498,10 @@ class Token():
 
     def getValue(self):
         return self.value
+
+    def setValue(self,value):
+        self.value=None
+        self.value=value
 
     def setID(self,ID):
         self.ID=ID

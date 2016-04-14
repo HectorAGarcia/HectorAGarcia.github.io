@@ -663,13 +663,12 @@ class Ui_MainWindow(QMainWindow):
             self.dialogTextLabels.append(self.dialogTextLabel)
             self.dialogs.append(self.dialog)
             x += 1
-        print self.dialogs
+
 
     def decorateDialog(self, character, dialogText):
         # Decorate the dialog
         if character.characterName == "Fish":
-            print len(self.dialogs)
-            print self.dialogsCount
+
             self.dialogs[self.dialogsCount].setObjectName(_fromUtf8("fishDialog"))
             self.dialogs[self.dialogsCount].setPixmap(QtGui.QPixmap(_fromUtf8("Media/fish_dialog.png")))
         if character.characterName == "Dog":
@@ -683,8 +682,7 @@ class Ui_MainWindow(QMainWindow):
     def makeDialogAppear(self, character, dialogText):# dialogText is a string, character is the character to say something
         self.decorateDialog(character, dialogText)
         self.dialogToShow = self.dialogs[self.dialogsCount]
-        print 'The dialog to show is: '
-        print self.dialogToShow
+
         makeDialogAppear = QtCore.QPropertyAnimation(self.dialogToShow, 'geometry') # Create the animation for specific characterLabel
         makeDialogAppear.setDuration(500)
         x1 = self.dialogToShow.x()
