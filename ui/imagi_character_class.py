@@ -8,8 +8,9 @@ class ImagiCharacter:
     active = False
 
     # Constructor
-    def __init__(self, characterLabel):
+    def __init__(self, characterName, characterLabel):
         self.characterLabel = characterLabel
+        self.characterName=characterName
 
     # Returns true if character is currently activated to appear in the scene, false if not
     def isActive(self):

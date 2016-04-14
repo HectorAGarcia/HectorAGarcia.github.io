@@ -113,7 +113,10 @@ class CommandProccesor():
 """
 
 def sayexe(tokens):
-    print tokens[0].getValue()+" "+tokens[1].getValue()+": "+tokens[2].getValue()
+    characterDICT=window.get_characters_dict()
+    window.group.addAnimation(window.makeDialogAppear(characterDICT[tokens[0].getValue()],tokens[2].getValue()))
+    window.group.addAnimation(window.group.addPause(5000))
+    window.group.addAnimation(window.makeDialogDissappear())
 
 def jumpexe(tokens):
     characterDICT=window.get_characters_dict() # get window character dictionary
