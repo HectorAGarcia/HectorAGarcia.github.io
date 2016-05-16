@@ -34,7 +34,7 @@ class ImagiHighlighter(QSyntaxHighlighter):
 
     # Logic Commands
     l_commands = [
-        'domultiple', 'repeat', 'domath'
+        'domultiple', 'repeat', 'domath','endrepeat',
     ]
 
     # move attributes
@@ -43,7 +43,7 @@ class ImagiHighlighter(QSyntaxHighlighter):
     ]
 
     types = [
-        'word', 'number'
+        'Word', 'Number'
     ]
 
     operators = [
